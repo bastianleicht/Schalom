@@ -16,7 +16,6 @@ module.exports.run = async (client, message, args) => {
         .addField("API Latency", `${Math.round(client.ws.ping)}ms`, true)
         .setTimestamp()
         .setFooter(client.config.copyright);
-
     message.channel.send(embed);
 };
 

@@ -3,8 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
@@ -29,11 +27,10 @@ exports.run = async (client, message, args) => {
     const embed = new Discord.MessageEmbed()
         .setTitle(`${user.tag}'s Avatar`)
         .setDescription(`[Avatar URL of **${user.tag}**](${avatar})`)
-        .setColor(3447003)
         .setImage(avatar)
+        .setColor(3447003)
         .setTimestamp()
         .setFooter(client.config.copyright);
-
     return message.channel.send(embed);
 };
 

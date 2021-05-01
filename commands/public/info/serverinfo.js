@@ -3,8 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 
@@ -58,14 +56,13 @@ module.exports.run = async (client, message, args) => {
 
     const embed = new MessageEmbed()
 		.setTitle(`**Guild information for __${message.guild.name}__**`)
-		.setColor('BLUE')
 		.setThumbnail(message.guild.iconURL({ dynamic: true }))
 		.addField('General', [
 			`**❯ Name:** ${message.guild.name}`,
 			`**❯ ID:** ${message.guild.id}`,
 			`**❯ Owner:** ${message.guild.owner.user.tag} (${message.guild.ownerID})`,
 			`**❯ Region:** ${regions[message.guild.region]}`,
-            //`**❯ Region:** ${message.guild.region}`,      //DEV falls unbekannte server region
+            //`**❯ Region:** ${message.guild.region}`,      //DEV if there is a unknown region
             `**❯ Boost Tier:** ${message.guild.premiumTier ? `Tier ${message.guild.premiumTier}` : 'None'}`,
             `**❯ Verified:** ${message.guild.verified ? "Server is verified" : "Server isn't verified"}`,
 			`**❯ Explicit Filter:** ${filterLevels[message.guild.explicitContentFilter]}`,
@@ -94,6 +91,7 @@ module.exports.run = async (client, message, args) => {
 			'\u200b'
 		])
 		.addField(`Roles [${roles.length - 1}]`, roles.length < 10 ? roles.join(', ') : roles.length > 10 ? trimArray(roles) : 'None')
+		.setColor('BLUE')
         .setTimestamp()
         .setFooter(client.config.copyright);
 	message.channel.send(embed);

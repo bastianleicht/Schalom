@@ -3,32 +3,26 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
+const sendError = require('./../../../utils/error');
 
 module.exports.run = async (client, message, args) => {
-    const baseUrl = "https://corona.lmao.ninja/v2";
-
-    let url, response, corona;
-
     if (message.author.bot) return;
+    const baseUrl = "https://corona.lmao.ninja/v2";
+    let url, response, corona;
 
     try {
         url = args[0] ? `${baseUrl}/countries/${args[0]}`:`${baseUrl}/all`;
         response = await axios.get(url);
         corona = response.data;
     } catch (error) {
-        return message.channel.send(`***${args[0]}*** doesn't exist, or data isn't being collected`);
+        return sendError('Corona | Error', `***${args[0]}*** doesn't exist, or data isn't being collected!`, message.channel);
     }
 
     const embed = new MessageEmbed()
         .setTitle(args[0] ? `${args[0].toUpperCase()} Stats` : 'Total Corona Cases World Wide')
-        .setColor(3447003)
-        .setThumbnail(args[0] ? corona.countryInfo.flag : 'https://i.giphy.com/YPbrUhP9Ryhgi2psz3.gif')
-        .setTimestamp()
-        .setFooter(client.config.copyright)
+        .setThumbnail(args[0] ? corona.countryInfo.flag : 'https://cdn.bastianleicht.de/etc/schalom/corona.gif')
         .addFields(
             {
                 name: 'Total Cases:',
@@ -69,8 +63,10 @@ module.exports.run = async (client, message, args) => {
                 name: 'Todays Deaths:',
                 value: corona.todayDeaths.toLocaleString(),
                 inline: true
-            });
-
+            })
+        .setColor(3447003)
+        .setTimestamp()
+        .setFooter(client.config.copyright);
     await message.channel.send(embed);
 };
 

@@ -3,8 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const Discord = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
@@ -16,7 +14,6 @@ module.exports.run = async (client, message, args) => {
         .setColor(3447003)
         .setTimestamp()
         .setFooter(client.config.copyright);
-
     return message.channel.send(embed);
 };
 

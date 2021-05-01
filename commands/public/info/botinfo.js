@@ -3,8 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const { MessageEmbed, version: djsversion } = require("discord.js");
 const { utc } = require('moment');
 const os = require('os');
