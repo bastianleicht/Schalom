@@ -3,29 +3,15 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
+const { MessageEmbed } = require('discord.js');
 const cherio = require('cherio');
 const request = require('request');
-const { MessageEmbed } = require('discord.js');
-const config = require('../../../opt/config.json');
+const sendError = require('./../../../utils/error');
 
 module.exports.run = async (client, message, args) => {
-
-    const notNSFW = new MessageEmbed()
-        .setTitle(':underage: | NSFW Command')
-        .setDescription(`Please switch to NSFW channel in order to use this command.`)
-        .setColor(0x8e44ad)
-        .setTimestamp()
-        .setFooter(config.copyright);
-
     if (message.channel.type !== 'dm' && !message.channel.nsfw) {
         await message.delete().catch(O_o => {});
-        return message.reply(notNSFW).then(msg => {
-            msg.delete({
-                timeout: 15000
-            });
-        }).catch(console.error);
+        return sendError(':underage: | NSFW Command', 'Please switch to NSFW channel in order to use this command.', message.channel);
     }
 
     //  All the used subreddits
@@ -46,7 +32,7 @@ module.exports.run = async (client, message, args) => {
     //  Doing the request to the selected subreddit
     request(`https://www.redditery.com/load.php?r=${subreddit}`, (err, resp, html) => {
 
-        if (!err && resp.statusCode == 200) {
+        if (!err && resp.statusCode === 200) {
 
             //  Just some logging
             // console.log("Request was success ");
@@ -60,7 +46,7 @@ module.exports.run = async (client, message, args) => {
 
             //  Searching the html for Images
             $("img").each((index, image) => {
-                var img = $(image).attr('src');
+                let img = $(image).attr('src');
                 links.push(img);
             });
 
@@ -85,13 +71,7 @@ module.exports.run = async (client, message, args) => {
             // console.log("Request Failed ");
 
             //  The Discord Embed
-            const embed = new MessageEmbed()
-                .setTitle(':warning: | Error')
-                .addField('**Request Failed**', `Please ask <@${config.owner}> to check the logs!`)
-                .setColor(0x8e44ad)
-                .setTimestamp()
-                .setFooter(config.copyright);
-            message.channel.send(embed);
+            return sendError(':warning: | Error', `**Request Failed**\nPlease ask <@${client.config.owner}> to check the logs!`, message.channel);
         }
 
     });
