@@ -1,0 +1,9 @@
+.idea
+node_modules
+commands/.old
+commands/.todo
+data
+opt/config.json
+json.sqlite
+output.log
+package-lock.json
