@@ -10,9 +10,7 @@
   <a href="https://github.com/routerabfrage/Schalom">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
-
-<h3 align="center">Schalom Bot</h3>
-
+  <h3 align="center">Schalom Bot</h3>
   <p align="center">
     Schalom is a fully featured Discord with some unique Features.
     <br/>
@@ -26,16 +24,12 @@
 </p>
 
 
-
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -63,14 +57,6 @@
 Here's a blank template to get started:
 **To avoid retyping too much info. Do a search and replace with your text editor for the following:**
 `github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
-
-
-### Built With
-
-* []()
-* []()
-* []()
-
 
 
 <!-- GETTING STARTED -->
@@ -102,16 +88,15 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+To use your Bot you have to rename the config in ```/opt/``` from ```config.json.example``` to ```config.json```. 
 
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-
+Then you have to fill in your Settings and most importantly the Bot Token. You can get or generate your Token on the [Discord Developers Page](https://discord.com/developers/applications/).
+If you want, you could even set the Token as an environment variable.
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/routerabfrage/Schalom/issues) for a list of proposed features (and known issues).
 
 
 
@@ -167,3 +152,4 @@ Project Link: [https://github.com/routerabfrage/Schalom](https://github.com/rout
 [issues-url]: https://github.com/routerabfrage/Schalom/issues
 [license-shield]: https://img.shields.io/github/license/routerabfrage/Schalom.svg?style=for-the-badge
 [license-url]: https://github.com/routerabfrage/Schalom/blob/master/LICENSE.txt
+[product-screenshot]: images/screenshot.png
