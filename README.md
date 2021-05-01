@@ -52,12 +52,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://discord.com/oauth2/authorize?client_id=777864354170273832&permissions=112536641&scope=bot)
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+Schalom is a Project I'm currently maintaining in my freetime. I am trying to get as many features as possible in this Bot.
 
+I'm now working since 2020 actively and since 2021 on GitHub.
 
 <!-- GETTING STARTED -->
 ## Getting Started
