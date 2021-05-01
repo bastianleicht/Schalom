@@ -3,7 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const Discord = require("discord.js");
 //TODO: Fix compliance with the Economy System
 

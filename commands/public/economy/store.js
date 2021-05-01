@@ -3,11 +3,11 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const Discord = require('discord.js');
 const db = require('quick.db');
 const config = require('../../../opt/config.json');
-//TODO: Komplett rework
+
+//TODO: Complete recode needed! Update to MYSQL!
 
 module.exports.run = async (client, message, args) => {
 
@@ -20,7 +20,7 @@ module.exports.run = async (client, message, args) => {
       .setFooter(client.config.copyright);
       message.channel.send(embed);
 
-    } else if(args[0] == 'nikes') {
+    } else if(args[0] === 'nikes') {
       let embed = new Discord.MessageEmbed()
       .setTitle('💰 Economy')
       .setDescription("👟 **Fresh Nikes**\n\nBenefits: More stats at the leaderboard.")
@@ -28,7 +28,7 @@ module.exports.run = async (client, message, args) => {
       .setTimestamp()
       .setFooter(config.copyright);
       message.channel.send(embed);
-    } else if(args[0] == 'car') {
+    } else if(args[0] === 'car') {
       let embed = new Discord.MessageEmbed()
       .setTitle('💰 Economy')
       .setDescription("🚗 **Car**\n\nBenefits: More stats at the leaderboard.")
@@ -36,7 +36,7 @@ module.exports.run = async (client, message, args) => {
       .setTimestamp()
       .setFooter(config.copyright);
       message.channel.send(embed);
-    } else if(args[0] == 'mansion') {
+    } else if(args[0] === 'mansion') {
       let embed = new Discord.MessageEmbed()
       .setTitle('💰 Economy')
       .setDescription("🏠 **Mansion**\n\nBenefits: More stats at the leaderboard.")

@@ -3,9 +3,10 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const Discord = require('discord.js');
 const db = require('quick.db');
+
+//TODO: Huge recode needed maybe MYSQL?
 
 module.exports.run = async (client, message, args) => {
     
@@ -14,8 +15,8 @@ module.exports.run = async (client, message, args) => {
     if(args[0] === 'nikes') {
         let Embed2 = new Discord.MessageEmbed()
         .setTitle('💰 Economy')
-        .setColor("#FF0000")
         .setDescription(`❌ You don't have Nikes to sell`)
+        .setColor("#FF0000")
         .setTimestamp()
         .setFooter(client.config.copyright);
 

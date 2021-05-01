@@ -7,17 +7,19 @@
 const Discord = require('discord.js');
 const db = require('quick.db');
 
+//TODO: Fix code style
+
 module.exports.run = async (client, message, args) => {
 
     let user = message.author;
     let author = db.fetch(`money_${message.guild.id}_${user.id}`);
 
     let Embed = new Discord.MessageEmbed()
-    .setTitle('💰 Economy')
-    .setColor(0x8e44ad)
-    .setDescription(`❌ You need 2000 coins to purchase Bronze VIP`)
-    .setTimestamp()
-    .setFooter(client.config.copyright);
+        .setTitle('💰 Economy')
+        .setDescription(`❌ You need 2000 coins to purchase Bronze VIP`)
+        .setColor(0x8e44ad)
+        .setTimestamp()
+        .setFooter(client.config.copyright);
 
     if (args[0] === 'bronze') {
         if (author < 3500) return message.channel.send(Embed);
@@ -26,21 +28,21 @@ module.exports.run = async (client, message, args) => {
         db.set(`bronze_${message.guild.id}_${user.id}`, true);
 
         let Embed2 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor(0x8e44ad)
-        .setDescription(`✅ Purchased Bronze VIP For 3500 Coins`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('💰 Economy')
+            .setDescription(`✅ Purchased Bronze VIP For 3500 Coins`)
+            .setColor(0x8e44ad)
+            .setTimestamp()
+            .setFooter(client.config.copyright);
 
         db.subtract(`money_${message.guild.id}_${user.id}`, 3500);
         message.channel.send(Embed2);
     } else if(args[0] === 'nikes') {
         let Embed2 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor("#FF0000")
-        .setDescription(`❌ You need 600 coins to purchase some Nikes`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('💰 Economy')
+            .setDescription(`❌ You need 600 coins to purchase some Nikes`)
+            .setColor("#FF0000")
+            .setTimestamp()
+            .setFooter(client.config.copyright);
 
         if (author < 600) return message.channel.send(Embed2);
        
@@ -48,21 +50,21 @@ module.exports.run = async (client, message, args) => {
         db.add(`nikes_${message.guild.id}_${user.id}`, 1);
 
         let Embed3 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor(0x8e44ad)
-        .setDescription(`✅ Purchased Fresh Nikes For 600 Coins`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('💰 Economy')
+            .setDescription(`✅ Purchased Fresh Nikes For 600 Coins`)
+            .setColor(0x8e44ad)
+            .setTimestamp()
+            .setFooter(client.config.copyright);
 
         db.subtract(`money_${message.guild.id}_${user.id}`, 600);
         message.channel.send(Embed3);
     } else if(args[0] === 'car') {
         let Embed2 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor("#FF0000")
-        .setDescription(`❌ You need 800 coins to purchase a new car`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('💰 Economy')
+            .setDescription(`❌ You need 800 coins to purchase a new car`)
+            .setColor("#FF0000")
+            .setTimestamp()
+            .setFooter(client.config.copyright);
 
         if (author < 800) return message.channel.send(Embed2);
        

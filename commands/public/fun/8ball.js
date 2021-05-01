@@ -3,10 +3,7 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true
 const { MessageEmbed } = require('discord.js');
-//TODO: Rework (dead cdn!)
 
 const answers = [
     'Maybe.',
@@ -19,7 +16,7 @@ const answers = [
     'I hope not.',
     'I hope so.',
     'Never!',
-    'Fuhgeddaboudit.',
+    'Forget about it.',
     'Ahaha! Really?!?',
     'Pfft.',
     'Sorry, bucko.',
@@ -36,11 +33,12 @@ const answers = [
 ];
 
 module.exports.run = async (client, message, args) => {
+    if (message.author.bot) return;
 
     if (args.join(' ').endsWith('?')) {
         const embed = new MessageEmbed()
             .setTitle('🎱 8ball')
-            .setThumbnail('http://static.routerabfrage.net/8ball.png')
+            .setThumbnail('https://cdn.bastianleicht.de/etc/schalom/8ball.png')
             .setDescription(`**${answers[Math.floor(Math.random() * answers.length)]}**`)
             .setColor(0x8e44ad)
             .setTimestamp()
@@ -51,7 +49,7 @@ module.exports.run = async (client, message, args) => {
         await message.delete().catch(O_o => {});
         const embed = new MessageEmbed()
             .setTitle('🎱 8ball')
-            .setThumbnail('http://static.routerabfrage.net/8ball.png')
+            .setThumbnail('https://cdn.bastianleicht.de/etc/schalom/8ball.png')
             .setDescription('That doesn\'t seem to be a question, please try again!')
             .setColor(0x8e44ad)
             .setTimestamp()
@@ -60,8 +58,8 @@ module.exports.run = async (client, message, args) => {
         message.channel.send(embed).then(msg => {
             msg.delete({
                 timeout: 10000
-            }); // Deletes Message after 10seconds
-        }).catch(console.error); // Logs the error if there is one 
+            });                                     // Deletes Message after 10seconds
+        }).catch(console.error);                    // Logs the error if there is one
     }
 
 };

@@ -3,25 +3,24 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const Discord = require("discord.js");
 const db = require("quick.db");
 
 module.exports.run = async (client, message, args) => {
 
   let user = message.mentions.members.first() || message.author;
-  let bal = db.fetch(`money_${message.guild.id}_${user.id}`);
+  let balance = db.fetch(`money_${message.guild.id}_${user.id}`);
   let bank = await db.fetch(`bank_${message.guild.id}_${user.id}`);
 
-  if (bal === null) bal = 0;
+  if (balance === null) balance = 0;
   if (bank === null) bank = 0;
 
   let moneyEmbed = new Discord.MessageEmbed()
-  .setTitle('Economy')
-  .setColor(0x8e44ad)
-  .setDescription(`**${user}'s Balance**\n\nPocket: ${bal}\nBank: ${bank}`)
-  .setTimestamp()
-  .setFooter(client.config.copyright);
+      .setTitle('💰 Economy')
+      .setDescription(`**${user}'s Balance**\n\nPocket: ${balance}\nBank: ${bank}`)
+      .setColor(0x8e44ad)
+      .setTimestamp()
+      .setFooter(client.config.copyright);
   message.channel.send(moneyEmbed);
 };
 

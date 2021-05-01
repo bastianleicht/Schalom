@@ -6,6 +6,7 @@
 //jshint esversion: 8
 const Discord = require("discord.js");
 const db = require("quick.db");
+
 //TODO: Rework
 
 module.exports.run = async (client, message, args) => {

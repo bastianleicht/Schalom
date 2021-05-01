@@ -5,7 +5,6 @@
  */
 //jshint esversion: 8
 const { MessageEmbed } = require("discord.js");
-const sendError = require("../../../utils/error");
 const config = require('../../../opt/config.json');
 
 module.exports.run = async function (client, message, args) {
@@ -18,7 +17,7 @@ module.exports.run = async function (client, message, args) {
     let pause = new MessageEmbed()
     .setDescription("⏸ Paused the music for you!")
     .setColor("YELLOW")
-    .setAuthor("Music has been paused!", "https://static.routerabfrage.net/gif/Music.gif")
+    .setAuthor("Music has been paused!", "https://cdn.bastianleicht.de/etc/schalom/music.gif")
     .setFooter(config.copyright);
     return message.channel.send(pause);
   }

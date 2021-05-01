@@ -18,11 +18,11 @@ module.exports.run = async (client, message, args) => {
         let time = ms(timeout - (Date.now() - author));
     
         let timeEmbed = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor("#FF0000")
-        .setDescription(`❌ You have already worked recently\n\nTry again in ${time.minutes}m ${time.seconds}s `)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('💰 Economy')
+            .setDescription(`❌ You have already worked recently\n\nTry again in ${time.minutes}m ${time.seconds}s `)
+            .setColor("#FF0000")
+            .setTimestamp()
+            .setFooter(client.config.copyright);
         message.channel.send(timeEmbed);
     } else {
 
@@ -30,13 +30,13 @@ module.exports.run = async (client, message, args) => {
         let result = Math.floor((Math.random() * replies.length));
         let amount = Math.floor(Math.random() * 80) + 1;
 
-        let embed1 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor(0x8e44ad)
-        .setDescription(`✅ You worked as a **${replies[result]}** and earned ${amount} coins`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-        message.channel.send(embed1);
+        let embed = new Discord.MessageEmbed()
+            .setTitle('💰 Economy')
+            .setDescription(`✅ You worked as a **${replies[result]}** and earned ${amount} coins`)
+            .setColor(0x8e44ad)
+            .setTimestamp()
+            .setFooter(client.config.copyright);
+        message.channel.send(embed);
         
         db.add(`money_${message.guild.id}_${user.id}`, amount);
         db.set(`work_${message.guild.id}_${user.id}`, Date.now());
