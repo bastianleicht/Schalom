@@ -3,14 +3,17 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const { MessageEmbed } = require("discord.js");
 const config = require('../opt/config.json');
 
- module.exports = async (text, channel) => {
+module.exports = async (title, text, channel) => {
     let embed = new MessageEmbed()
-    .setColor("RED")
-    .setDescription(text)
-    .setFooter(config.copyright);
-    await channel.send(embed);
+        .setTitle(title)
+        .setDescription(text)
+        .setColor("RED")
+        .setTimestamp()
+        .setFooter(config.copyright);
+    await channel.send(embed).then(msg => {
+        msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
+    }).catch(console.error);                    // Logs the error if there is one ;
 };
