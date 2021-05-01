@@ -1,0 +1,24 @@
+{
+  "token": "",
+  "owner": "",
+  "team": ["", ""],
+  "prefix": "",
+  "version": "",
+  "copyright": "",
+  "reportChannel": "",
+  "serverstats": {
+    "main": {
+      "serverID": "",
+      "channel": ""
+    }
+  },
+  "api": {
+    "fortnite": "",
+    "csgo": "",
+    "osu": ""
+  },
+  "giveaway": {
+    "everyoneMention": false,
+    "hostedBy": true
+  }
+}
