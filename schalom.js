@@ -141,25 +141,18 @@ fs.readdir('./commands/public/gameinfo', async (err, files) => {
     console.log('------------------------------------------------');
 });
 
-fs.readdir('./commands/public/music', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/music/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Music Command '${cmdName}'`);
-        client.commands.music.set(cmdName, props);
-        client.commands.set(cmdName, props);
-
-     });
-     console.log('------------------------------------------------');
- });
-
-    // "@discordjs/opus": "^0.3.3",
-    // "ffmpeg": "0.0.4",
-    // "ffmpeg-static": "^4.2.7",
-    // "node-opus": "^0.3.3",
-
-
+//fs.readdir('./commands/public/music', async (err, files) => {
+//    files.forEach(file => {
+//        if (!file.endsWith('.js')) return;
+//        let props = require(`./commands/public/music/${file}`);
+//        let cmdName = file.split('.')[0];
+//        console.log(`Loaded Music Command '${cmdName}'`);
+//        client.commands.music.set(cmdName, props);
+//        client.commands.set(cmdName, props);
+//
+//    });
+//    console.log('------------------------------------------------');
+//});
 
 fs.readdir('./commands/public/nsfw', async (err, files) => {
     files.forEach(file => {
