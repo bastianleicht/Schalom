@@ -3,11 +3,9 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const Discord = require('discord.js');
 
 module.exports = (client, error) => {
-    //  Haha hope that works (there is no way)
+    //  Haha hope that works (WTF?)
     console.log(`Error has been issued: ${error}`);
 };

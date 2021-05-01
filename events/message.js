@@ -3,9 +3,7 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-
 module.exports = (client, message) => {
-
     //  Check who sends the message and if it has the Prefix
     if(message.author.bot) return;
     if(message.content.indexOf(client.config.prefix) !== 0) return;
@@ -20,5 +18,4 @@ module.exports = (client, message) => {
 
     //  Run the Command
     cmd.run(client, message, args, command);
-
 };
