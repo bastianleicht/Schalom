@@ -4,39 +4,47 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const Discord = require("discord.js");
-const db = require("quick.db");
+const economyHelper = require('./../../../utils/helper/economyHelper');
+const errorHandler = require('./../../../utils/handler/error');
 const ms = require("parse-ms");
 
 module.exports.run = async (client, message, args) => {
 
-    let user = message.author;
-    let timeout = 86400000;
-    let amount = 200;
-    let daily = await db.fetch(`daily_${message.guild.id}_${user.id}`);
+    let timeout = 86400000;     //24h
+    let amount = 200;           //
 
-    if (daily !== null && timeout - (Date.now() - daily) > 0) {
-        let time = ms(timeout - (Date.now() - daily));
+    client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+        if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
 
-        let timeEmbed = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You've already collected your daily reward!\n\nCollect it again in ${time.hours}h ${time.minutes}m ${time.seconds}s `)
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(timeEmbed);
+        const daily = rows[0].daily;
+        const money = rows[0].money;
 
-    } else {
-        let moneyEmbed = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`✅ You've collected your daily reward of ${amount} coins`)
-            .setColor(3447003)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(moneyEmbed);
+        if (daily !== null && timeout - (Date.now() - daily) > 0) {
+            let time = ms(timeout - (Date.now() - daily));
 
-        db.add(`money_${message.guild.id}_${user.id}`, amount);
-        db.set(`daily_${message.guild.id}_${user.id}`, Date.now());
-    }
+            let timeEmbed = new Discord.MessageEmbed()
+                .setTitle('💰 Economy')
+                .setDescription(`❌ You've already collected your daily reward!\n\nCollect it again in ${time.hours}h ${time.minutes}m ${time.seconds}s `)
+                .setColor('#FF0000')
+                .setTimestamp()
+                .setFooter(client.config.copyright);
+            message.channel.send(timeEmbed);
+
+        } else {
+            let moneyEmbed = new Discord.MessageEmbed()
+                .setTitle('💰 Economy')
+                .setDescription(`✅ You've collected your daily reward of ${amount} coins`)
+                .setColor(3447003)
+                .setTimestamp()
+                .setFooter(client.config.copyright);
+            message.channel.send(moneyEmbed);
+
+            const add = parseInt(money) + amount;
+            economyHelper.updateMoney(message.author.id, add, client.db);
+            economyHelper.setValue(message.author.id, 'daily', Date.now(), client.db);
+        }
+
+    });
 };
 
 
