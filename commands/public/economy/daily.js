@@ -33,7 +33,7 @@ module.exports.run = async (client, message, args) => {
         } else {
             let moneyEmbed = new Discord.MessageEmbed()
                 .setTitle('💰 Economy')
-                .setDescription(`✅ You've collected your daily reward of ${amount} coins`)
+                .setDescription(`✅ You've collected your daily reward of ${amount} coins!`)
                 .setColor(3447003)
                 .setTimestamp()
                 .setFooter(client.config.copyright);
