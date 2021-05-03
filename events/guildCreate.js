@@ -20,7 +20,7 @@ module.exports = async (client, guild) => {
                     client.db.query('INSERT INTO server ( guildID ) values (?)', [guild.id], (err, { insertId }) => {
 
                         if (err) return console.error(`${client.date} | MYSQL: guildCreate (id: ${guild.id}) insertion failed! Error: ${err}`);
-                        if (insertId === null) return console.error(`${client.date} | MYSQL: guildCreate (id: ${guild.id}) insertion failed!`);
+                        if (!insertId) return console.error(`${client.date} | MYSQL: guildCreate (id: ${guild.id}) insertion failed!`);
 
                         console.log(`${client.date} | ${client.user.username} just joined a new guild! \nGuild Name: '${guild.name}' \nGuild ID: '${guild.id}' \nGuild Membercount: '${guild.memberCount}'!`);
 
