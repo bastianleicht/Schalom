@@ -6,24 +6,37 @@
 
 //  Discord
 const Discord = require("discord.js");
+const fs = require('fs');
+const Enmap = require('enmap');
+const mysql = require('mysql');
+const cliProgress = require('cli-progress');
+
+const dbconfig = require('./opt/database');
+const config = require('./opt/config.json');
+const utils = require('./utils/utils.js');
+const errorHandler = require('./utils/handler/error');
+
+let events = 0;
+let loadedEvents = 0;
+let commands = 0;
+let loadedCommands = 0;
+
 const client = new Discord.Client({
     disabledEvents: ["RELATIONSHIP_ADD", "RELATIONSHIP_REMOVE", "TYPING_START"]
 });
 
 //  MYSQL Database
-const mysql = require('mysql');
-const dbconfig = require('./opt/database');
 const connection = mysql.createConnection(dbconfig.connection);
 client.dbconfig = dbconfig;
 client.db = connection;
 
-//  Client Config
-const config = require('./opt/config.json');
+//  Client Config, Utils
 client.config = config;
+client.utils = utils;
+client.errorHandler = errorHandler;
+client.date = getDate();
 
 //  Command Handler (public)
-const fs = require('fs');
-const Enmap = require('enmap');
 client.events = new Enmap();
 client.commands = new Enmap();
 client.commands.fun = new Enmap();
@@ -33,7 +46,6 @@ client.commands.music = new Enmap();
 client.commands.nsfw = new Enmap();
 client.commands.moderation = new Enmap();
 client.commands.economy = new Enmap();
-
 //  Command Handler (private)
 client.commands.team = new Enmap();
 client.commands.owner = new Enmap();
@@ -41,11 +53,18 @@ client.commands.owner = new Enmap();
 //  Music Queue
 client.queue = new Map();
 
-// Client Utils
-const utils = require('./utils/utils.js');
-client.utils = utils;
-const errorHandler = require('./utils/handler/error');
-client.errorHandler = errorHandler;
+function getDate() {
+    let date = new Date();
+    let year = date.getYear() + 1900;
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let month = months[date.getMonth()];
+    let day = date.getDate().toString().length < 2 ? "0" + date.getDate() : date.getDate();
+    let hour = date.getHours().toString().length < 2 ? "0" + date.getHours() : date.getHours();
+    let minute = date.getMinutes().toString().length < 2 ? "0" + date.getMinutes() : date.getMinutes();
+    let second = date.getSeconds().toString().length < 2 ? "0" + date.getSeconds() : date.getSeconds();
+    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+}
+
 
 //  GiveawaysManager Settings
 const {GiveawaysManager} = require('discord-giveaways');
@@ -60,11 +79,6 @@ client.GiveawaysManager = new GiveawaysManager(client, {
     }
 });
 
-const cliProgress = require('cli-progress');
-let events = 0;
-let loadedEvents = 0;
-let commands = 0;
-let loadedCommands = 0;
 
 const loadEvents = new cliProgress.SingleBar({
     format: 'Events   | {bar} | {percentage}% || {value}/{total}',
