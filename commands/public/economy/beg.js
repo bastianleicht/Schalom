@@ -4,40 +4,50 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const Discord = require("discord.js");
-const db = require("quick.db");
+const economyHelper = require('./../../../utils/helper/economyHelper');
+const errorHandler = require('./../../../utils/handler/error');
 const ms = require("parse-ms");
 
 module.exports.run = async (client, message, args) => {
+    await economyHelper.checkUser(message.author.id, client.db);
 
-    let timeout = 180000;
-    let amount = 5;
-    let beg = await db.fetch(`beg_${message.guild.id}_${message.author.id}`);
+    const timeout = 900000;     // 15min
+    const max_amount = 10;      //
+    const amount = (Math.random() * (max_amount - 1) + 1).toFixed(0);
 
-    if (beg !== null && timeout - (Date.now() - beg) > 0) {
-        let time = ms(timeout - (Date.now() - beg));
+    client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+        if(error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
 
-        let timeEmbed = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You've already begged recently!\n\nBeg again in ${time.minutes}m ${time.seconds}s `)
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(timeEmbed);
+        const beg = rows[0].beg;
+        const money = rows[0].money;
 
-    } else {
-        let moneyEmbed = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`✅ You've begged and received ${amount} coins`)
-            .setColor(3447003)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(moneyEmbed);
+        if (beg !== null && timeout - (Date.now() - beg) > 0) {
+            let time = ms(timeout - (Date.now() - beg));
 
-        db.add(`money_${message.guild.id}_${message.author.id}`, amount);
-        db.set(`beg_${message.guild.id}_${message.author.id}`, Date.now());
-    }
+            let timeEmbed = new Discord.MessageEmbed()
+                .setTitle('💰 Economy')
+                .setDescription(`❌ You've already begged recently!\n\nBeg again in ${time.minutes}m ${time.seconds}s `)
+                .setColor('#FF0000')
+                .setTimestamp()
+                .setFooter(client.config.copyright);
+            message.channel.send(timeEmbed);
+        } else {
+
+            let moneyEmbed = new Discord.MessageEmbed()
+                .setTitle('💰 Economy')
+                .setDescription(`✅ You've begged and received ${Number(amount)} coins`)
+                .setColor(3447003)
+                .setTimestamp()
+                .setFooter(client.config.copyright);
+            message.channel.send(moneyEmbed);
+
+            const add = parseInt(money) + parseInt(amount);
+            economyHelper.updateMoney(message.author.id, add, client.db);
+            economyHelper.setValue(message.author.id, 'beg', Date.now(), client.db);
+        }
+
+    });
 };
-
 
 module.exports.help = {
     name: "beg",
