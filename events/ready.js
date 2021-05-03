@@ -7,6 +7,12 @@ module.exports = (client) => {
     //  Just for Logging!
     console.log(`Logged in as ${client.user.tag}!`);
 
+    client.db.connect(err => {
+        if(err) return console.error('MYSQL: Connection error: ' + err);
+
+        console.log(`MySQL has been connected!`);
+    });
+
     /*  REMOVE: If different activities should be displayed!
 
     //  The activities

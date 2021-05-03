@@ -7,7 +7,20 @@
 
 //  Discord
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({
+    disabledEvents: ["RELATIONSHIP_ADD", "RELATIONSHIP_REMOVE", "TYPING_START"]
+});
+
+//  MYSQL Database
+const mysql = require('mysql');
+const dbconfig = require('./opt/database');
+const connection = mysql.createConnection(dbconfig.connection);
+client.dbconfig = dbconfig;
+client.db = connection;
+
+//  Client Config
+const config = require('./opt/config.json');
+client.config = config;
 
 //  Command Handler (public)
 const fs = require('fs');
