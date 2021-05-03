@@ -4,24 +4,30 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const Discord = require("discord.js");
-const db = require("quick.db");
+const economyHelper = require('./../../../utils/helper/economyHelper');
+const errorHandler = require('./../../../utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-  let user = message.mentions.members.first() || message.author;
-  let balance = db.fetch(`money_${message.guild.id}_${user.id}`);
-  let bank = await db.fetch(`bank_${message.guild.id}_${user.id}`);
+    let user = message.mentions.members.first() || message.author;
+    await economyHelper.checkUser(user.id, client.db);
 
-  if (balance === null) balance = 0;
-  if (bank === null) bank = 0;
+    client.db.query('SELECT * FROM economy WHERE userID = ?', [user.id], function (error, rows) {
+        if(error) return errorHandler.mysql(`Error while querying the money for User : "${user_id}"!\n ${error}`);
 
-  let moneyEmbed = new Discord.MessageEmbed()
-      .setTitle('💰 Economy')
-      .setDescription(`**${user}'s Balance**\n\nPocket: ${balance}\nBank: ${bank}`)
-      .setColor(0x8e44ad)
-      .setTimestamp()
-      .setFooter(client.config.copyright);
-  message.channel.send(moneyEmbed);
+
+        const balance = rows[0].money;
+        const bank = rows[0].bank;
+
+        let moneyEmbed = new Discord.MessageEmbed()
+            .setTitle('💰 Economy')
+            .setDescription(`**${user}'s Balance**\n\nPocket: ${balance}\nBank: ${bank}`)
+            .setColor(0x8e44ad)
+            .setTimestamp()
+            .setFooter(client.config.copyright);
+        message.channel.send(moneyEmbed);
+
+    });
 };
 
 module.exports.help = {
