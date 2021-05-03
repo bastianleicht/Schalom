@@ -3,7 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 
 //  Discord
 const Discord = require("discord.js");
@@ -39,17 +38,17 @@ client.commands.economy = new Enmap();
 client.commands.team = new Enmap();
 client.commands.owner = new Enmap();
 
-//  Music Queue reference
+//  Music Queue
 client.queue = new Map();
 
-//  Client Config
-const config = require('./opt/config.json');
-client.config = config;
+// Client Utils
 const utils = require('./utils/utils.js');
 client.utils = utils;
+const errorHandler = require('./utils/handler/error');
+client.errorHandler = errorHandler;
 
 //  GiveawaysManager Settings
-const { GiveawaysManager } = require('discord-giveaways');
+const {GiveawaysManager} = require('discord-giveaways');
 client.GiveawaysManager = new GiveawaysManager(client, {
     storage: "./opt/giveaways.json",
     updateCountdownEvery: 5000,
@@ -61,154 +60,189 @@ client.GiveawaysManager = new GiveawaysManager(client, {
     }
 });
 
-console.log('------------------------------------------------');
+const cliProgress = require('cli-progress');
+let events = 0;
+let loadedEvents = 0;
+let commands = 0;
+let loadedCommands = 0;
 
-fs.readdir('./events/', (err, files) => {
-    if (err) return console.error;
-    files.forEach(file => {
-     if (!file.endsWith('.js')) return;
-     const evt = require(`./events/${file}`);
-     let evtName = file.split('.')[0];
-     console.log(`Loaded event '${evtName}'`);
-     client.events.set(evtName);
-     client.on(evtName, evt.bind(null, client));
-    
-    });
-    console.log('------------------------------------------------');
+const loadEvents = new cliProgress.SingleBar({
+    format: 'Events   | {bar} | {percentage}% || {value}/{total}',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: true,
 });
 
-fs.readdir('./commands/', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Help Command '${cmdName}'`);
-        client.commands.set(cmdName, props);
-
-    });
-    console.log('------------------------------------------------');
+const loadCommands = new cliProgress.SingleBar({
+    format: 'Commands | {bar} | {percentage}% || {value}/{total}',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: true,
 });
 
-fs.readdir('./commands/owner/', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/owner/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Owner Command '${cmdName}'`);
-        client.commands.owner.set(cmdName, props);
-        client.commands.set(cmdName, props);
+//  Counting the Events
+const readEvents = fs.readdirSync('./events/').filter(file => file.endsWith('.js'));
+for (let file of readEvents) { events++; }
 
-    });
-    console.log('------------------------------------------------');
-});
+//  Counting the Commands
+const count = dirs => {
+    const read = fs.readdirSync(`./commands/${dirs}`).filter(file => file.endsWith('.js'));
+    for (let file of read) {
+        commands++;
+    }
+};
+['', 'owner', 'public/economy', 'public/fun', 'public/gameinfo', 'public/info', 'public/moderation', 'public/music', 'public/nsfw', 'team'].forEach(dir => count(dir));
 
-fs.readdir('./commands/team/', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/team/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Team Command '${cmdName}'`);
-        client.commands.team.set(cmdName, props);
-        client.commands.set(cmdName, props);
+console.log("Loading modules:");
 
-    });
-    console.log('------------------------------------------------');
-});
+//  Start Loading Events
+loadEvents.start(events, 0);
 
-fs.readdir('./commands/public/fun/', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/fun/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Fun Command '${cmdName}'`);
-        client.commands.fun.set(cmdName, props);
-        client.commands.set(cmdName, props);
+const EventReader = fs.readdirSync(`./events/`).filter(file => file.endsWith('.js'));
+for (let file of EventReader) {
+    const evt = require(`./events/${file}`);
+    let evtName = file.split('.')[0];
+    loadedEvents++;
+    loadEvents.update(loadedEvents);
+    client.events.set(evtName);
+    client.on(evtName, evt.bind(null, client));
+}
+//  Stop Loading Events
+loadEvents.stop();
 
-    });
-    console.log('------------------------------------------------');
-});
+//  Start Loading Commands
+loadCommands.start(commands, 0);
 
-fs.readdir('./commands/public/info', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/info/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Info Command '${cmdName}'`);
-        client.commands.info.set(cmdName, props);
-        client.commands.set(cmdName, props);
+const CommandReader = fs.readdirSync(`./commands/`).filter(file => file.endsWith('.js'));
+for (let file of CommandReader) {
+    let props = require(`./commands/${file}`);
+    let cmdName = file.split('.')[0];
 
-    });
-    console.log('------------------------------------------------');
-});
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
 
-fs.readdir('./commands/public/gameinfo', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/gameinfo/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded GameInfo Command '${cmdName}'`);
-        client.commands.gameinfo.set(cmdName, props);
-        client.commands.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
 
-    });
-    console.log('------------------------------------------------');
-});
+const CommandOwner = fs.readdirSync(`./commands/owner/`).filter(file => file.endsWith('.js'));
+for (let file of CommandOwner) {
+    let props = require(`./commands/owner/${file}`);
+    let cmdName = file.split('.')[0];
 
-//fs.readdir('./commands/public/music', async (err, files) => {
-//    files.forEach(file => {
-//        if (!file.endsWith('.js')) return;
-//        let props = require(`./commands/public/music/${file}`);
-//        let cmdName = file.split('.')[0];
-//        console.log(`Loaded Music Command '${cmdName}'`);
-//        client.commands.music.set(cmdName, props);
-//        client.commands.set(cmdName, props);
-//
-//    });
-//    console.log('------------------------------------------------');
-//});
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
 
-fs.readdir('./commands/public/nsfw', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/nsfw/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded NSFW Command '${cmdName}'`);
-        client.commands.nsfw.set(cmdName, props);
-        client.commands.set(cmdName, props);
+    client.commands.owner.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
 
-    });
-    console.log('------------------------------------------------');
-});
+const CommandTeam = fs.readdirSync(`./commands/team/`).filter(file => file.endsWith('.js'));
+for (let file of CommandTeam) {
+    let props = require(`./commands/team/${file}`);
+    let cmdName = file.split('.')[0];
 
-fs.readdir('./commands/public/moderation', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/moderation/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Moderation Command '${cmdName}'`);
-        client.commands.moderation.set(cmdName, props);
-        client.commands.set(cmdName, props);
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
 
-    });
-    console.log('------------------------------------------------');
-});
+    client.commands.team.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
 
-fs.readdir('./commands/public/economy', async (err, files) => {
-    files.forEach(file => {
-        if (!file.endsWith('.js')) return;
-        let props = require(`./commands/public/economy/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded Economy Command '${cmdName}'`);
-        client.commands.economy.set(cmdName, props);
-        client.commands.set(cmdName, props);
+const CommandFun = fs.readdirSync(`./commands/public/fun/`).filter(file => file.endsWith('.js'));
+for (let file of CommandFun) {
+    let props = require(`./commands/public/fun/${file}`);
+    let cmdName = file.split('.')[0];
 
-    });
-    console.log('------------------------------------------------');
-});
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
 
-process.on('unhandledRejection', error => {
-    console.error('Unhandled promise rejection:', error);
-});
+    client.commands.fun.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandInfo = fs.readdirSync(`./commands/public/info/`).filter(file => file.endsWith('.js'));
+for (let file of CommandInfo) {
+    let props = require(`./commands/public/info/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.info.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandGameInfo = fs.readdirSync(`./commands/public/gameinfo/`).filter(file => file.endsWith('.js'));
+for (let file of CommandGameInfo) {
+    let props = require(`./commands/public/gameinfo/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.gameinfo.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandMusic = fs.readdirSync(`./commands/public/music/`).filter(file => file.endsWith('.js'));
+for (let file of CommandMusic) {
+    let props = require(`./commands/public/music/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.music.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandNSFW = fs.readdirSync(`./commands/public/nsfw/`).filter(file => file.endsWith('.js'));
+for (let file of CommandNSFW) {
+    let props = require(`./commands/public/nsfw/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.nsfw.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandModeration = fs.readdirSync(`./commands/public/moderation/`).filter(file => file.endsWith('.js'));
+for (let file of CommandModeration) {
+    let props = require(`./commands/public/moderation/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.moderation.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+
+const CommandEconomy = fs.readdirSync(`./commands/public/economy/`).filter(file => file.endsWith('.js'));
+for (let file of CommandEconomy) {
+    let props = require(`./commands/public/economy/${file}`);
+    let cmdName = file.split('.')[0];
+
+    loadedCommands++;
+    loadCommands.update(loadedCommands);
+
+    client.commands.economy.set(cmdName, props);
+    client.commands.set(cmdName, props);
+}
+//  Stop Loading Commands
+loadCommands.stop();
+
+//  Error handling
+client.on('DiscordAPIError', error => errorHandler.DiscordAPIError(error));
+client.on('error', error => errorHandler.error(error));
+client.on('warn', warning => errorHandler.warn(warning));
+client.on('disconnected', () => errorHandler.disconnect());
+client.on('reconnecting', () => errorHandler.reconnecting());
+
+process.on('unhandledRejection', error => errorHandler.unhandledRejection(error));
+process.on('uncaughtException', error => errorHandler.uncaughtException(error));
 
 
 client.login(config.token2 || process.env.TOKEN);
