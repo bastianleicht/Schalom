@@ -20,6 +20,7 @@
         "semi": "error"
     },
     "globals": {
+        "__BASE__": false,
         "cmdStatus": true,
         "defaultSettings": true
     }
