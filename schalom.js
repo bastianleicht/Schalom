@@ -16,6 +16,8 @@ const config = require('./opt/config.json');
 const utils = require('./utils/utils.js');
 const errorHandler = require('./utils/handler/error');
 
+global.__BASE__ = process.cwd();
+
 let events = 0;
 let loadedEvents = 0;
 let commands = 0;
