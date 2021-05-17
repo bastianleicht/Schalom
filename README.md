@@ -7,7 +7,7 @@
 <!-- PROJECT LOGO -->
 <br/>
 <p align="center">
-  <a href="https://github.com/routerabfrage/Schalom">
+  <a href="https://github.com/bastianleicht/Schalom">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">Schalom Bot</h3>
@@ -17,9 +17,9 @@
     <br/>
     <a href="https://discord.com/oauth2/authorize?client_id=777864354170273832&permissions=112536641&scope=bot">View Demo</a>
     ·
-    <a href="https://github.com/routerabfrage/Schalom/issues">Report Bug</a>
+    <a href="https://github.com/bastianleicht/Schalom/issues">Report Bug</a>
     ·
-    <a href="https://github.com/routerabfrage/Schalom/issues">Request Feature</a>
+    <a href="https://github.com/bastianleicht/Schalom/issues">Request Feature</a>
   </p>
 </p>
 
@@ -75,7 +75,7 @@ This is an example of how to list things you need to use the software and how to
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/routerabfrage/Schalom.git
+   git clone https://github.com/bastianleicht/Schalom.git
    ```
 2. Install NPM packages
    ```sh
@@ -95,7 +95,7 @@ If you want, you could even set the Token as an environment variable.
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/routerabfrage/Schalom/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/bastianleicht/Schalom/issues) for a list of proposed features (and known issues).
 
 
 
@@ -124,7 +124,7 @@ Distributed under the BSD 2-Clause License. See `LICENSE` for more information.
 
 Bastian Leicht - [@bastianleicht](https://twitter.com/bastianleicht) - mail@bastianleicht.de
 
-Project Link: [https://github.com/routerabfrage/Schalom](https://github.com/routerabfrage/Schalom)
+Project Link: [https://github.com/bastianleicht/Schalom](https://github.com/bastianleicht/Schalom)
 
 
 
@@ -141,14 +141,14 @@ Project Link: [https://github.com/routerabfrage/Schalom](https://github.com/rout
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/routerabfrage/Schalom.svg?style=for-the-badge
-[contributors-url]: https://github.com/routerabfrage/Schalom/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/routerabfrage/Schalom.svg?style=for-the-badge
-[forks-url]: https://github.com/routerabfrage/Schalom/network/members
-[stars-shield]: https://img.shields.io/github/stars/routerabfrage/Schalom.svg?style=for-the-badge
-[stars-url]: https://github.com/routerabfrage/Schalom/stargazers
-[issues-shield]: https://img.shields.io/github/issues/routerabfrage/Schalom.svg?style=for-the-badge
-[issues-url]: https://github.com/routerabfrage/Schalom/issues
-[license-shield]: https://img.shields.io/github/license/routerabfrage/Schalom.svg?style=for-the-badge
-[license-url]: https://github.com/routerabfrage/Schalom/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/bastianleicht/Schalom.svg?style=for-the-badge
+[contributors-url]: https://github.com/bastianleicht/Schalom/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/bastianleicht/Schalom.svg?style=for-the-badge
+[forks-url]: https://github.com/bastianleicht/Schalom/network/members
+[stars-shield]: https://img.shields.io/github/stars/bastianleicht/Schalom.svg?style=for-the-badge
+[stars-url]: https://github.com/bastianleicht/Schalom/stargazers
+[issues-shield]: https://img.shields.io/github/issues/bastianleicht/Schalom.svg?style=for-the-badge
+[issues-url]: https://github.com/bastianleicht/Schalom/issues
+[license-shield]: https://img.shields.io/github/license/bastianleicht/Schalom.svg?style=for-the-badge
+[license-url]: https://github.com/bastianleicht/Schalom/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
