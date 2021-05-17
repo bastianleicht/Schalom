@@ -11,10 +11,10 @@
   "author": "Bastian Leicht <mail@bastianleicht.de> (https://bastianleicht.de)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/routerabfrage/Schalom.git"
+    "url": "git+https://github.com/bastianleicht/Schalom.git"
   },
   "bugs": {
-    "url": "https://github.com/routerabfrage/Schalom/issues"
+    "url": "https://github.com/bastianleicht/Schalom/issues"
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
@@ -39,6 +39,7 @@
     "ms": "^2.1.2",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
+    "node-ipinfo": "^2.1.0",
     "node-opus": "^0.3.3",
     "node-osu": "^2.2.0",
     "node-schedule": "^2.0.0",
@@ -57,6 +58,6 @@
   "devDependencies": {
     "eslint": "7.15.0"
   },
-  "homepage": "https://github.com/routerabfrage/Schalom#readme",
+  "homepage": "https://github.com/bastianleicht/Schalom#readme",
   "keywords": []
 }
