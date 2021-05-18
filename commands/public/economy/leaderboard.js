@@ -3,86 +3,44 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-const Discord = require('discord.js');
-const db = require('quick.db');
+const Discord       = require('discord.js');
+const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
-//TODO: Huge bugfixes with the DB. Maybe change to MYSQL?
+//TODO: Need to fix the Embed because it crashes the Bot when there are not 10 Users in the DB!
 
 module.exports.run = async (client, message, args) => {
-    const embed = new Discord.MessageEmbed()
-      .setDescription(`**Input a Leaderboard Option**\n\nCoin Leaderboard: m!leaderboard coins\nFresh Nikes Leaderboard: m!leaderboard nikes\nCar Leaderboard: m!leaderboard car\nMansion Leaderboard: m!leaderboard mansion`)
-      .setColor("#FFFFFF");
 
-  if(!args[0]) return message.channel.send(embed);
+    client.db.query('SELECT * FROM economy ORDER BY money DESC LIMIT 10', [message.author.id], function (error, rows) {
+        if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
 
-    if (args[0] === 'coins') {
-    let money = db.startsWith(`money_${message.guild.id}`, { sort: '.data'});
-    let content = "";
-
-    for (let i = 0; i < money.length; i++) {
-        let user = client.users.get(money[i].ID.split('_')[2]).username;
-        content += `${i+1}. ${user} ~ ${money[i].data}\n`;
-      }
-
-    const embed = new Discord.MessageEmbed()
-    .setDescription(`**${message.guild.name}'s Coin Leaderboard**\n\n${content}`)
-    .setColor("#FFFFFF");
-
-    message.channel.send(embed);
-  } else if(args[0] === 'nikes') {
-    let nike = db.startsWith(`nikes_${message.guild.id}`, { sort: '.data'});
-    let content = "";
-
-    for (let i = 0; i < nike.length; i++) {
-        let user = client.users.get(nike[i].ID.split('_')[2]).username;
-        content += `${i+1}. ${user} ~ ${nike[i].data}\n`;
-    }
-
-    const embed = new Discord.MessageEmbed()
-    .setDescription(`**${message.guild.name}'s Fresh Nikes Leaderboard**\n\n${content}`)
-    .setColor("#FFFFFF");
-
-    message.channel.send(embed);
-  } else if(args[0] === 'car') {
-    let cars = db.startsWith(`car_${message.guild.id}`, { sort: '.data'});
-    let content = "";
-
-    for (let i = 0; i < cars.length; i++) {
-        let user = client.users.get(cars[i].ID.split('_')[2]).username;
-
-        content += `${i+1}. ${user} ~ ${cars[i].data}\n`;
-    }
-
-    const embed = new Discord.MessageEmbed()
-    .setDescription(`**${message.guild.name}'s Car Leaderboard**\n\n${content}`)
-    .setColor("#FFFFFF");
-
-    message.channel.send(embed);
-  } else if(args[0] === 'mansion') {
-    let mansions = db.startsWith(`house_${message.guild.id}`, { sort: '.data'});
-    let content = "";
-
-    for (let i = 0; i < mansions.length; i++) {
-        let user = client.users.get(mansions[i].ID.split('_')[2]).username;
-
-        content += `${i+1}. ${user} ~ ${mansions[i].data}\n`;
-    }
-
-    const embed = new Discord.MessageEmbed()
-    .setDescription(`**${message.guild.name}'s Mansion Leaderboard**\n\n${content}`)
-    .setColor("#FFFFFF");
-
-    message.channel.send(embed);
-  }
-
+        let embed = new Discord.MessageEmbed()
+            .setTitle('💰 Economy')
+            .addField('Leaderboard:', [
+                `** 1. ** <@${rows[0].userID}> (${rows[0].money} Coins)`,
+                `** 2. ** <@${rows[1].userID}> (${rows[1].money} Coins)`,
+                `** 3. ** <@${rows[2].userID}> (${rows[2].money} Coins)`,
+                `** 4. ** <@${rows[3].userID}> (${rows[3].money} Coins)`,
+                `** 5. ** <@${rows[4].userID}> (${rows[4].money} Coins)`,
+                `** 6. ** <@${rows[5].userID}> (${rows[5].money} Coins)`,
+                `** 7. ** <@${rows[6].userID}> (${rows[6].money} Coins)`,
+                `** 8. ** <@${rows[7].userID}> (${rows[7].money} Coins)`,
+                `** 9. ** <@${rows[8].userID}> (${rows[8].money} Coins)`,
+                `** 10. ** <@${rows[9].userID}> (${rows[9].money} Coins)`,
+                '\u200b'
+            ])
+            .setColor(0x8e44ad)
+            .setTimestamp()
+            .setFooter(client.config.copyright);
+        message.channel.send(embed);
+    });
 };
 
 module.exports.help = {
-  name: "leaderboard",
-  usage: "leaderboard <board>",
-  description: "",
-  permissions: "",
-  guildOnly: false,
-  nsfw: false,
-  ownerOnly: false,
+    name: "leaderboard",
+    usage: "leaderboard",
+    description: "",
+    permissions: "",
+    guildOnly: false,
+    nsfw: false,
+    ownerOnly: false,
 };
