@@ -6,9 +6,9 @@
 
 module.exports = async (client, guild) => {
     try {
-        client.db.query('SELECT * FROM server WHERE guildID = ?', [guild.id], (err, { length }) => {
+        client.db.query('SELECT * FROM server WHERE guildID = ?', [guild.id], (err, rows) => {
             if(err) return console.error(`${client.date} | MYSQL: query guildID ERROR: ${err}`);
-            if(length) {
+            if(rows.length > 0) {
                 //  Guild already exists in DB
                 console.log(`${client.date} | ${client.user.username} just re-joined a guild! \nGuild Name: '${guild.name}' \nGuild ID: '${guild.id}' \nGuild Membercount: '${guild.memberCount}'!`);
 
