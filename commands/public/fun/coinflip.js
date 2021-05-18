@@ -5,10 +5,9 @@
  */
 const Discord = require('discord.js');
 
-//TODO: Rework (dead cdn, missing gif!)
+//TODO: Maybe advance a little bit?
 
 module.exports.run = async (client, message, args) => {
-    if (message.author.bot) return;
 
     let choices = [
         "Head",
@@ -20,8 +19,8 @@ module.exports.run = async (client, message, args) => {
     const embed = new Discord.MessageEmbed()
         .setColor(3447003)
         .setTitle('Coinflip')
-        .setDescription(`You have ${output}`)
-        //.setImage('https://static.routerabfrage.net/coinflip.gif')      // I don't actually have the gif anymore :(
+        .setThumbnail('https://cdn.bastianleicht.de/etc/schalom/coinflip.gif')
+        .setDescription(`You have ${output}!`)
         .setTimestamp()
         .setFooter(client.config.copyright);
 
@@ -31,7 +30,7 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
     name: "coinflip",
     usage: "coinflip",
-    description: "Does a random coinflip.",
+    description: "Performs a coinflip.",
     permissions: "",
     guildOnly: false,
     nsfw: false,
