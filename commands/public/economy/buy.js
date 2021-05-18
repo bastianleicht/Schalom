@@ -3,115 +3,234 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
-const Discord = require('discord.js');
-const db = require('quick.db');
-
-//TODO: Fix code style
+const Discord       = require('discord.js');
+const economyHelper = require(__BASE__ + '/utils/helper/economyHelper');
+const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-    let user = message.author;
-    let author = db.fetch(`money_${message.guild.id}_${user.id}`);
+    const item = args.join(" ");
 
-    let Embed = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setDescription(`❌ You need 2000 coins to purchase Bronze VIP`)
-        .setColor(0x8e44ad)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-
-    if (args[0] === 'bronze') {
-        if (author < 3500) return message.channel.send(Embed);
-        
-        db.fetch(`bronze_${message.guild.id}_${user.id}`);
-        db.set(`bronze_${message.guild.id}_${user.id}`, true);
-
-        let Embed2 = new Discord.MessageEmbed()
+    if(!item) {
+        let embed = new Discord.MessageEmbed()
             .setTitle('💰 Economy')
-            .setDescription(`✅ Purchased Bronze VIP For 3500 Coins`)
-            .setColor(0x8e44ad)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-
-        db.subtract(`money_${message.guild.id}_${user.id}`, 3500);
-        message.channel.send(Embed2);
-    } else if(args[0] === 'nikes') {
-        let Embed2 = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You need 600 coins to purchase some Nikes`)
             .setColor("#FF0000")
+            .setDescription('❌ Enter an item to buy')
             .setTimestamp()
             .setFooter(client.config.copyright);
-
-        if (author < 600) return message.channel.send(Embed2);
-       
-        db.fetch(`nikes_${message.guild.id}_${user.id}`);
-        db.add(`nikes_${message.guild.id}_${user.id}`, 1);
-
-        let Embed3 = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`✅ Purchased Fresh Nikes For 600 Coins`)
-            .setColor(0x8e44ad)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-
-        db.subtract(`money_${message.guild.id}_${user.id}`, 600);
-        message.channel.send(Embed3);
-    } else if(args[0] === 'car') {
-        let Embed2 = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You need 800 coins to purchase a new car`)
-            .setColor("#FF0000")
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-
-        if (author < 800) return message.channel.send(Embed2);
-       
-        db.fetch(`car_${message.guild.id}_${user.id}`);
-        db.add(`car_${message.guild.id}_${user.id}`, 1);
-
-        let Embed3 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor(0x8e44ad)
-        .setDescription(`✅ Purchased a New Car For 800 Coins`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-
-        db.subtract(`money_${message.guild.id}_${user.id}`, 800);
-        message.channel.send(Embed3);
-    } else if(args[0] === 'mansion') {
-        let Embed2 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor("#FF0000")
-        .setDescription(`❌ You need 1200 coins to purchase a Mansion`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-
-        if (author < 1200) return message.channel.send(Embed2);
-       
-        db.fetch(`house_${message.guild.id}_${user.id}`);
-        db.add(`house_${message.guild.id}_${user.id}`, 1);
-
-        let Embed3 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor(0x8e44ad)
-        .setDescription(`✅ Purchased a Mansion For 1200 Coins`)
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-
-        db.subtract(`money_${message.guild.id}_${user.id}`, 1200);
-        message.channel.send(Embed3);
-    } else {
-        let embed3 = new Discord.MessageEmbed()
-        .setTitle('💰 Economy')
-        .setColor("#FF0000")
-        .setDescription('❌ Enter an item to buy')
-        .setTimestamp()
-        .setFooter(client.config.copyright);
-        message.channel.send(embed3);
+        return message.channel.send(embed);
     }
 
+    client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], (error, { length }) => {
+        if (error || !length) {
+            // User does not exist in DB
+            client.db.query(`INSERT INTO economy (userid) values (?)`, [message.author.id], (error, {insertId}) => {
+                if (error) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!\n ${error}`);
+                if (!insertId) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!`);
+
+                client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+                    if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
+
+                    const money = rows[0].money;
+                    const bank  = rows[0].bank;
+                    const house = rows[0].house;
+                    const car   = rows[0].car;
+                    const rank  = rows[0].rank;
+
+                    if(money === 0 && bank === 0) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription("❌ You don't have any money to buy something!")
+                            .setColor('#FF0000')
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    if(item === 'house') {
+                        if(parseInt(money) < 3500) {
+                            let embed = new Discord.MessageEmbed()
+                                .setTitle('💰 Economy')
+                                .setDescription(`❌ You need 3500 coins to purchase a House!`)
+                                .setColor(0x8e44ad)
+                                .setTimestamp()
+                                .setFooter(client.config.copyright);
+                            return message.channel.send(embed);
+                        }
+
+                        const remove = parseInt(money) - 3500;
+                        const add = parseInt(house) + 1;
+                        economyHelper.updateMoney(message.author.id, remove, client.db);
+                        economyHelper.setValue(message.author.id, 'house', add, client.db);
+
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`✅ Purchased a House for 3500 Coins`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    } else if(item === 'car') {
+                        if(parseInt(money) < 2000) {
+                            let embed = new Discord.MessageEmbed()
+                                .setTitle('💰 Economy')
+                                .setDescription(`❌ You need 2000 coins to purchase a Car!`)
+                                .setColor(0x8e44ad)
+                                .setTimestamp()
+                                .setFooter(client.config.copyright);
+                            return message.channel.send(embed);
+                        }
+
+                        const remove = parseInt(money) - 2000;
+                        const add = parseInt(car) + 1;
+                        economyHelper.updateMoney(message.author.id, remove, client.db);
+                        economyHelper.setValue(message.author.id, 'car', add, client.db);
+
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`✅ Purchased a Car for 2000 Coins`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    } else if(item === 'rank') {
+                        if(parseInt(money) < 30000) {
+                            let embed = new Discord.MessageEmbed()
+                                .setTitle('💰 Economy')
+                                .setDescription(`❌ You need 30000 coins to purchase VIP!`)
+                                .setColor(0x8e44ad)
+                                .setTimestamp()
+                                .setFooter(client.config.copyright);
+                            return message.channel.send(embed);
+                        }
+
+                        if(rank === 'VIP') {
+                            let embed = new Discord.MessageEmbed()
+                                .setTitle('💰 Economy')
+                                .setDescription(`❌ You already bought VIP!`)
+                                .setColor(0x8e44ad)
+                                .setTimestamp()
+                                .setFooter(client.config.copyright);
+                            return message.channel.send(embed);
+                        }
+
+                        const remove = parseInt(money) - 30000;
+                        economyHelper.updateMoney(message.author.id, remove, client.db);
+                        economyHelper.setValue(message.author.id, 'rank', 'VIP', client.db);
+
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`✅ Purchased VIP for 30000 Coins`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+                });
+            });
+        } else {
+            // User exists in DB
+            client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+                if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
+
+                const money = rows[0].money;
+                const bank  = rows[0].bank;
+                const house = rows[0].house;
+                const car   = rows[0].car;
+                const rank  = rows[0].rank;
+
+                if(money === 0 && bank === 0) {
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription("❌ You don't have any money to buy something!")
+                        .setColor('#FF0000')
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    return message.channel.send(embed);
+                }
+
+                if(item === 'house') {
+                    if(parseInt(money) < 3500) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`❌ You need 3500 coins to purchase a House!`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    const remove = parseInt(money) - 3500;
+                    const add = parseInt(house) + 1;
+                    economyHelper.updateMoney(message.author.id, remove, client.db);
+                    economyHelper.setValue(message.author.id, 'house', add, client.db);
+
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription(`✅ Purchased a House for 3500 Coins`)
+                        .setColor(0x8e44ad)
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    return message.channel.send(embed);
+                } else if(item === 'car') {
+                    if(parseInt(money) < 2000) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`❌ You need 2000 coins to purchase a Car!`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    const remove = parseInt(money) - 2000;
+                    const add = parseInt(car) + 1;
+                    economyHelper.updateMoney(message.author.id, remove, client.db);
+                    economyHelper.setValue(message.author.id, 'car', add, client.db);
+
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription(`✅ Purchased a Car for 2000 Coins`)
+                        .setColor(0x8e44ad)
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    return message.channel.send(embed);
+                } else if(item === 'rank') {
+                    if(parseInt(money) < 30000) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`❌ You need 30000 coins to purchase VIP!`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    if(rank === 'VIP') {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`❌ You already bought VIP!`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    const remove = parseInt(money) - 30000;
+                    economyHelper.updateMoney(message.author.id, remove, client.db);
+                    economyHelper.setValue(message.author.id, 'rank', 'VIP', client.db);
+
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription(`✅ Purchased VIP for 30000 Coins`)
+                        .setColor(0x8e44ad)
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    return message.channel.send(embed);
+                }
+            });
+        }
+    });
 };
 
 module.exports.help = {
