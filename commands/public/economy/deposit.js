@@ -3,72 +3,153 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-const Discord = require("discord.js");
-const db = require("quick.db");
+const Discord       = require("discord.js");
+const economyHelper = require(__BASE__ + '/utils/helper/economyHelper');
+const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-    let user = message.author;
-    let member = db.fetch(`money_${message.guild.id}_${user.id}`);
+    const amount = args.join(" ");
 
-    if (args[0] === 'all') {
-        let money = await db.fetch(`money_${message.guild.id}_${user.id}`);
-
-        let embed_all_err = new Discord.MessageEmbed()
+    if (!amount) {
+        let embed = new Discord.MessageEmbed()
             .setTitle('💰 Economy')
-            .setDescription("❌ You don't have any money to deposit")
+            .setDescription(`❌ Specify an amount to deposit!`)
             .setColor('#FF0000')
             .setTimestamp()
             .setFooter(client.config.copyright);
-        if(money === 0) return message.channel.send(embed_all_err);
-
-        db.add(`bank_${message.guild.id}_${user.id}`, money);
-        db.subtract(`money_${message.guild.id}_${user.id}`, money);
-
-        let embed5 = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`✅ You have deposited all your coins into your bank`)
-            .setColor(0x8e44ad)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(embed5);
-
-    } else {
-        let embed_amount = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ Specify an amount to deposit`)
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        if (!args[0]) return message.channel.send(embed_amount);
-
-        let embed_negative = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You can't deposit negative money`)
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        if (message.content.includes('-')) return message.channel.send(embed_negative);
-
-        let embed_poor = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`❌ You don't have that much money`)
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        if (member < args[0]) return message.channel.send(embed_poor);
-
-        let embed_done = new Discord.MessageEmbed()
-            .setTitle('💰 Economy')
-            .setDescription(`✅ You have deposited ${args[0]} coins into your bank`)
-            .setColor(0x8e44ad)
-            .setTimestamp()
-            .setFooter(client.config.copyright);
-        message.channel.send(embed_done);
-
-        db.add(`bank_${message.guild.id}_${user.id}`, args[0]);
-        db.subtract(`money_${message.guild.id}_${user.id}`, args[0]);
+        return message.channel.send(embed);
     }
+
+    if (message.content.includes('-')) {
+        let embed = new Discord.MessageEmbed()
+            .setTitle('💰 Economy')
+            .setDescription(`❌ You can't deposit negative money!`)
+            .setColor('#FF0000')
+            .setTimestamp()
+            .setFooter(client.config.copyright);
+        return message.channel.send(embed);
+    }
+
+    client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], (error, { length }) => {
+        if (error || !length) {
+            // User does not exist in DB
+            client.db.query(`INSERT INTO economy (userid) values (?)`, [message.author.id], (error, {insertId}) => {
+                if (error) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!\n ${error}`);
+                if (!insertId) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!`);
+
+                client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+                    if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
+
+                    const money = rows[0].money;
+                    const bank  = rows[0].bank;
+
+                    if(money === 0) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription("❌ You don't have any money to deposit!")
+                            .setColor('#FF0000')
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    if(amount === 'all') {
+                        const add = parseInt(money) + parseInt(bank);
+                        economyHelper.updateMoney(message.author.id, '0', client.db);
+                        economyHelper.updateBank(message.author.id, add, client.db);
+
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`✅ You have deposited all your coins into your bank.`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        message.channel.send(embed);
+                    } else {
+                        if (parseInt(money) < amount) {
+                            let embed = new Discord.MessageEmbed()
+                                .setTitle('💰 Economy')
+                                .setDescription(`❌ You don't have that much money!`)
+                                .setColor('#FF0000')
+                                .setTimestamp()
+                                .setFooter(client.config.copyright);
+                            return message.channel.send(embed);
+                        }
+
+                        const remove = parseInt(money) - amount;
+                        const add = parseInt(bank) + parseInt(amount);
+                        economyHelper.updateMoney(message.author.id, remove, client.db);
+                        economyHelper.updateBank(message.author.id, add, client.db);
+
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`✅ You have deposited ${amount} coins into your bank.`)
+                            .setColor(0x8e44ad)
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        message.channel.send(embed);
+                    }
+                });
+            });
+
+        } else {
+            // User exists in DB
+            client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], function (error, rows) {
+                if (error) return errorHandler.mysql(`Error while querying data for User : "${message.author.id}"!\n ${error}`);
+
+                const money = rows[0].money;
+                const bank  = rows[0].bank;
+
+                if(money === 0) {
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription("❌ You don't have any money to deposit!")
+                        .setColor('#FF0000')
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    return message.channel.send(embed);
+                }
+
+                if(amount === 'all') {
+                    const add = parseInt(money) + parseInt(bank);
+                    economyHelper.updateMoney(message.author.id, '0', client.db);
+                    economyHelper.updateBank(message.author.id, add, client.db);
+
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription(`✅ You have deposited all your coins into your bank.`)
+                        .setColor(0x8e44ad)
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    message.channel.send(embed);
+                } else {
+                    if (parseInt(money) < amount) {
+                        let embed = new Discord.MessageEmbed()
+                            .setTitle('💰 Economy')
+                            .setDescription(`❌ You don't have that much money!`)
+                            .setColor('#FF0000')
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
+                        return message.channel.send(embed);
+                    }
+
+                    const remove = parseInt(money) - amount;
+                    const add = parseInt(bank) + parseInt(amount);
+                    economyHelper.updateMoney(message.author.id, remove, client.db);
+                    economyHelper.updateBank(message.author.id, add, client.db);
+
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle('💰 Economy')
+                        .setDescription(`✅ You have deposited ${amount} coins into your bank.`)
+                        .setColor(0x8e44ad)
+                        .setTimestamp()
+                        .setFooter(client.config.copyright);
+                    message.channel.send(embed);
+                }
+            });
+        }
+    });
 };
 
 module.exports.help = {
