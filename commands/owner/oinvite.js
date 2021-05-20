@@ -3,15 +3,14 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-const Discord = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
     if(message.author.id !== client.config.owner) return;
-    //TODO Working
+    const guildID = args.join(" ");
 
     if (!message.guild) {
-        const getGuild = client.guilds.cache.get(args.guild);
+        console.log('test');
+        const getGuild = client.guilds.cache.get(guildID);
         const toInv = getGuild.channels.cache.first();
 
         const invite = toInv.createInvite({
@@ -22,8 +21,8 @@ module.exports.run = async (client, message, args) => {
         }).catch(console.error);
 
     } else {
-        const getGuild = this.client.guilds.get(args.guild);
-        const toInv = getGuild.channels.first();
+        const getGuild = client.guilds.cache.get(guildID);
+        const toInv = getGuild.channels.cache.first();
 
         const invite = toInv.createInvite({
             maxAge: 120,
