@@ -3,14 +3,12 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-const Discord = require('discord.js');
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
     if (message.author.id !== client.config.owner) return;
 
     try {
-        await message.channel.send("Bot is shutting down!");
+        await message.author.send("Bot is shutting down!");
         process.exit();
     } catch(e) {
         message.channel.send(`ERROR: ${e.message}`);
