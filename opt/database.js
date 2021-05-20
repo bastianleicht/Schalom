@@ -6,6 +6,7 @@
 
 module.exports = {
     connection: {
+        connectionLimit : 5,
         host: 'localhost',
         user: 'root',
         password: '',

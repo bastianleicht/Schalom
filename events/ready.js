@@ -7,7 +7,7 @@ module.exports = (client) => {
     //  Just for Logging!
     console.log(`${client.date} | Logged in as ${client.user.tag}!`);
 
-    client.db.connect(err => {
+    client.pool.getConnection(function (err, connection) {
         if(err) return console.error(client.date + ' | MYSQL: Connection error: ' + err);
 
         console.log(`${client.date} | MySQL has been connected!`);

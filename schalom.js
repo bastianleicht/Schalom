@@ -28,9 +28,53 @@ const client = new Discord.Client({
 });
 
 //  MYSQL Database
-const connection = mysql.createConnection(dbconfig.connection);
+const clusterConfig = {
+    canRetry: true,
+    removeNodeErrorCount: 1,
+    defaultSelector: 'RR'
+};
+
+const pool = mysql.createPoolCluster(clusterConfig);
+pool.add('MASTER', dbconfig.connection);
+pool.add('SLAVE1', dbconfig.connection);
+pool.add('SLAVE2', dbconfig.connection);
+pool.add('SLAVE3', dbconfig.connection);
+
 client.dbconfig = dbconfig;
-client.db = connection;
+client.pool = pool;
+client.db = {
+    query: function () {
+        let queryArgs = Array.prototype.slice.call(arguments),
+            events = [],
+            eventNameIndex = {};
+
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                if (eventNameIndex.error) {
+                    eventNameIndex.error();
+                }
+            }
+            if (conn) {
+                let q = conn.query.apply(conn, queryArgs);
+                q.on('end', function () {
+                    conn.release();
+                });
+
+                events.forEach(function (args) {
+                    q.on.apply(q, args);
+                });
+            }
+        });
+
+        return {
+            on: function (eventName, callback) {
+                events.push(Array.prototype.slice.call(arguments));
+                eventNameIndex[eventName] = callback;
+                return this;
+            }
+        };
+    }
+};
 
 //  Client Config, Utils
 client.config = config;
@@ -259,6 +303,22 @@ client.on('reconnecting', () => errorHandler.reconnecting());
 
 process.on('unhandledRejection', error => errorHandler.unhandledRejection(error));
 process.on('uncaughtException', error => errorHandler.uncaughtException(error));
+
+pool.on('acquire', function (connection) {
+    console.log('Connection %d acquired', connection.threadId);
+});
+
+pool.on('connection', function (connection) {
+    connection.query('SET SESSION auto_increment_increment=1');
+});
+
+pool.on('enqueue', function () {
+    console.log('Waiting for available connection slot');
+});
+
+pool.on('release', function (connection) {
+    console.log('Connection %d released', connection.threadId);
+});
 
 
 client.login(config.token2 || process.env.TOKEN);
