@@ -18,7 +18,9 @@ module.exports.run = async (client, message, args) => {
             maxUses: 1
         }).then(async invite => {
             await message.author.send(`Here's the invite link to **${getGuild.name}**!\n${invite}`);
-        }).catch(console.error);
+        }).catch(console.error).then(msg => {
+            msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
+        }).catch(console.error);                    // Logs the error if there is one
 
     } else {
         const getGuild = client.guilds.cache.get(guildID);
@@ -29,7 +31,9 @@ module.exports.run = async (client, message, args) => {
             maxUses: 1
         }).then(async invite => {
             await message.author.send(`Here's the invite link to **${getGuild.name}**!\n${invite}`);
-            message.channel.send('✅ | I\'ve sent the invite link to your DMs!');
+            message.channel.send('✅ | I\'ve sent the invite link to your DMs!').then(msg => {
+                msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
+            }).catch(console.error);                    // Logs the error if there is one
         }).catch(console.error);
     }
 
