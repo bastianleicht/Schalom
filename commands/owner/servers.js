@@ -25,7 +25,7 @@ module.exports.run = async (client, message, args) => {
       const range = (servers.length === 1) ? '[1]' : `[1 - ${servers.length}]`;
       message.channel.send(embed.setTitle(`Server List ${range}`).setDescription(servers.join('\n')));
     } else {
-      new ReactionMenu(message.client, message.channel, message.member, embed, servers);
+      new ReactionMenu(message.client, message.channel, message.author, embed, servers);
     }
 
 };
