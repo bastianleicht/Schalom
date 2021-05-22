@@ -3,12 +3,9 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const Discord = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
-    if(message.channel === 'dm') return;
     if(message.member.hasPermission('MANAGE_MESSAGES')) {
     await message.delete().catch(O_o => {});
 
@@ -31,11 +28,11 @@ module.exports.run = async (client, message, args) => {
     } else {
         await message.delete().catch(O_o => {});
         const embed = new Discord.MessageEmbed()
-        .setTitle('Missing Permission')
-        .setDescription(`I'm sorry but you don't have the **MANAGE_MESSAGES** Permission`)
-        .setColor('#FF0000')
-        .setTimestamp()
-        .setFooter(client.config.copyright);
+            .setTitle('Missing Permission')
+            .setDescription(`I'm sorry but you don't have the **MANAGE_MESSAGES** Permission`)
+            .setColor('#FF0000')
+            .setTimestamp()
+            .setFooter(client.config.copyright);
         message.channel.send(embed).then(msg => {
             msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
         }).catch(console.error);        // Logs the error if there is one 
