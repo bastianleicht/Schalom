@@ -6,8 +6,6 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
-    const reason = args.slice(1).join(" ");
-
     if(!message.member.hasPermission('BAN_MEMBERS')) {
         let embed = new Discord.MessageEmbed()
             .setTitle(':hammer: Moderation')
