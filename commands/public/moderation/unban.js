@@ -68,3 +68,13 @@ module.exports.run = async (client, message, args) => {
         }).catch(console.error);                // Logs the error if there is one
     });
 };
+
+module.exports.help = {
+    name: "unban",
+    usage: "unban userid",
+    description: "Unbans the specified user.",
+    permissions: ["BAN_MEMBERS"],
+    guildOnly: true,
+    nsfw: false,
+    ownerOnly: false,
+};
