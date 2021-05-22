@@ -4,7 +4,6 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const { MessageEmbed } = require("discord.js");
-//TODO: Rework completely
 
 async function promptMessage (message, author, time, validReactions) {
     // We put in the time as seconds, with this it's being transferred to MS
