@@ -60,7 +60,7 @@ module.exports.run = async (client, message, args) => {
     const embed = new Discord.MessageEmbed()
         .setTitle(':hammer: Moderation')
         .setDescription(`Changed the channel's slowmode to **${duration}s**!`)
-        .setColor('#FFE100FF')
+        .setColor('#62ff00')
         .setTimestamp()
         .setFooter(client.config.copyright);
     message.channel.send(embed);
