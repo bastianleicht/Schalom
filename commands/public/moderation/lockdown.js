@@ -18,9 +18,11 @@ module.exports.run = async (client, message, args) => {
         let validUnlocks = ['release', 'unlock'];
         if (!time) {
             let embed = new Discord.MessageEmbed()
-                .setTitle('Error')
+                .setTitle(':hammer: Moderation')
                 .setDescription("👾 You must set a duration for the lockdown in either hours, minutes or seconds")
-                .setColor('36393e');
+                .setColor('36393e')
+                .setTimestamp()
+                .setFooter(client.config.copyright);
             return message.channel.send(embed);
         }
 
@@ -32,9 +34,11 @@ module.exports.run = async (client, message, args) => {
                 }
             ]).then(() => {
                 let embed = new Discord.MessageEmbed()
-                    .setTitle('🔒 Lockdown')
+                    .setTitle(':hammer: Moderation')
                     .setDescription("🔓 Lockdown lifted.")
-                    .setColor('36393e');
+                    .setColor('36393e')
+                    .setTimestamp()
+                    .setFooter(client.config.copyright);
                 message.channel.send(embed);
                 clearTimeout(client.lockit[message.channel.id]);
                 delete client.lockit[message.channel.id];
@@ -49,16 +53,20 @@ module.exports.run = async (client, message, args) => {
                 }
                 ]).then(() => {
                 let embed = new Discord.MessageEmbed()
-                    .setTitle("🔒 Channel Locked")
-                    .addField("Locked by", `${message.author}`, true)
+                    .setTitle(":hammer: Moderation")
+                    .addField("🔒 Channel Locked \nLocked by", `${message.author}`, true)
                     .addField("Locked for", `${ms(ms(time), { long:true })}`, true)
-                    .setColor('36393e');
+                    .setColor('36393e')
+                    .setTimestamp()
+                    .setFooter(client.config.copyright);
                 message.channel.send(embed).then(() => {
                     client.lockit[message.channel.id] = setTimeout(() => {
                         let embed = new Discord.MessageEmbed()
-                            .setTitle('🔒 Lockdown')
+                            .setTitle(':hammer: Moderation')
                             .setDescription("🔓 Lockdown lifted.")
-                            .setColor('36393e');
+                            .setColor('36393e')
+                            .setTimestamp()
+                            .setFooter(client.config.copyright);
                         message.channel.overwritePermissions([
                             {
                                 id: message.guild.id,
@@ -75,13 +83,23 @@ module.exports.run = async (client, message, args) => {
         }
     } else {
         let embed = new Discord.MessageEmbed()
-            .setTitle('Error')
-            .setDescription("👾 Missing Permissions :: MANAGE_SERVER")
-            .setColor('36393e');
-        message.channel.send(embed);
+            .setTitle(':hammer: Moderation')
+            .setDescription('❌ I\'m sorry but you don\'t have the **MANAGE_GUILD** Permission!')
+            .setColor('#FF0000')
+            .setTimestamp()
+            .setFooter(client.config.copyright);
+        return message.channel.send(embed).then(msg => {
+            msg.delete({ timeout: 10000 });     // Deletes Message after 10seconds
+        }).catch(console.error);                // Logs the error if there is one
     }
 };
 
 module.exports.help = {
-    name: "lockdown"
+    name: "lockdown",
+    usage: "lockdown <0-21601>",
+    description: "Locks the channel for the specified time.",
+    permissions: ["MANAGE_GUILD"],
+    guildOnly: true,
+    nsfw: false,
+    ownerOnly: false,
 };
