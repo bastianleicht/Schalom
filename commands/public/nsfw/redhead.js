@@ -22,7 +22,6 @@ module.exports.run = async (client, message, args) => {
         "FireBush",
         "redheads",
         "redhead",
-        "thesluttyginger",
         "FreckledRedheads",
         "redheads",
 
