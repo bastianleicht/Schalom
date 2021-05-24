@@ -28,7 +28,6 @@ module.exports.run = async (client, message, args) => {
         "FunWithFriends",
         "whooties",
         "gonewild",
-        
 
     ];
 
