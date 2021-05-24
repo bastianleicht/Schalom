@@ -20,7 +20,6 @@ module.exports.run = async (client, message, args) => {
         "closeup",
         "NSFW_Wallpapers",
         "4k_porn",
-        "4kboomer",
         "UHDnsfw",
         "nsfw_hd",
         "HighResNSFW",
