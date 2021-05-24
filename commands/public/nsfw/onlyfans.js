@@ -16,7 +16,6 @@ module.exports.run = async (client, message, args) => {
 
     //  All the used subreddits
     let reddit = [
-        "LEAKEDonlyfans",
         "OnlyfansFiles4Free",
         "Onlyfanspromoss",
         "onlyfanshottest",
@@ -27,7 +26,6 @@ module.exports.run = async (client, message, args) => {
         "OnlyFansBusty",
         "Onlyfans_Promo",
         "OnlyFansPromotions",
-        "OnlyfansPacks",
         "OnlyFansInked",
 
     ];
