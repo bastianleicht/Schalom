@@ -56,6 +56,13 @@ module.exports.run = async (client, message, args) => {
         "Roughanal",
         "nsfw",
         "palegirls",
+        "SexyFrex",
+        "GoneWildPlus",
+        "adorableporn",
+        "cumfetish",
+        "bimbofetish",
+        "WouldYouFuckMyWife",
+        "rule34",
 
     ];
 
