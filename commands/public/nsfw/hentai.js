@@ -29,6 +29,13 @@ module.exports.run = async (client, message, args) => {
         "funpiece",
         "hentai",
         "AnimeMILFS",
+        "futanari",
+        "gangbanghentai",
+        "IWantToBeHerHentai",
+        "FreeuseHentai",
+        "HelplessHentai",
+        "Hentai4Everyone",
+        "hentaihaven",
 
     ];
 
