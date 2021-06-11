@@ -21,6 +21,10 @@ module.exports.run = async (client, message, args) => {
         "CumFromAnal",
         "AnalGW",
         "AnalPorn",
+        "MasterOfAnal",
+        "buttplug",
+        "YourAnalBabes",
+        "alteredbuttholes",
 
     ];
 
