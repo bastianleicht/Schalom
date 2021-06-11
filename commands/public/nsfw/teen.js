@@ -21,6 +21,9 @@ module.exports.run = async (client, message, args) => {
         "LegalTeens",
         "Just18",
         "Barelylegal",
+        "adorableporn",
+        "naughtychicks",
+        "pornID",
 
     ];
 
