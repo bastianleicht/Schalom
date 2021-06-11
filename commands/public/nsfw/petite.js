@@ -21,6 +21,11 @@ module.exports.run = async (client, message, args) => {
         "PetiteGoneWild",
         "PetiteGirls",
         "PetiteNSFW",
+        "dirtysmall",
+        "BustyPetite",
+        "xsmallgirls",
+        "bodyperfection",
+        "PornStarletHQ",
 
     ];
 
