@@ -24,6 +24,11 @@ module.exports.run = async (client, message, args) => {
         "amateur_milfs",
         "40plusGoneWild",
         "Sexydesibabes",
+        "HotMoms",
+        "AgedBeauty",
+        "milfsdoporn",
+        "Milfie",
+        "wifesharing",
 
     ];
 
