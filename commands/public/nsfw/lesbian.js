@@ -20,6 +20,7 @@ module.exports.run = async (client, message, args) => {
         "lesbians",
         "lesbianasslick",
         "lesdom",
+        "girlskissing",
 
     ];
 
