@@ -19,6 +19,9 @@ module.exports.run = async (client, message, args) => {
     let reddit = [
         "JapaneseUncensored",
         "JapaneseHotties",
+        "japanpornstars",
+        "AsiansGoneWild",
+        "nextdoorasians",
 
     ];
 
