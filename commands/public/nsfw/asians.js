@@ -20,6 +20,9 @@ module.exports.run = async (client, message, args) => {
         "AsiansGoneWild",
         "AsianHotties",
         "asianbabes",
+        "ThickAsians",
+        "NSFW_Japan",
+        "nextdoorasians",
 
     ];
 
