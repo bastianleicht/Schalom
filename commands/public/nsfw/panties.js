@@ -27,6 +27,8 @@ module.exports.run = async (client, message, args) => {
         "CheekyBottoms",
         "Bottomless",
         "nopanties",
+        "Pantyfetish",
+        "usedpanties",
 
     ];
 
