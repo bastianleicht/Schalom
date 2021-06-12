@@ -49,11 +49,7 @@ client.db = {
             eventNameIndex = {};
 
         pool.getConnection(function (err, conn) {
-            if (err) {
-                if (eventNameIndex.error) {
-                    eventNameIndex.error();
-                }
-            }
+            if (err && eventNameIndex.error) eventNameIndex.error();
             if (conn) {
                 let q = conn.query.apply(conn, queryArgs);
                 q.on('end', function () {
@@ -76,7 +72,7 @@ client.db = {
     }
 };
 
-//  Client Config, Utils
+//  Client Config, Utils, errorHandler, date
 client.config = config;
 client.utils = utils;
 client.errorHandler = errorHandler;
@@ -95,7 +91,6 @@ client.commands.economy = new Enmap();
 //  Command Handler (private)
 client.commands.team = new Enmap();
 client.commands.owner = new Enmap();
-
 //  Music Queue
 client.queue = new Map();
 
@@ -111,7 +106,6 @@ function getDate() {
     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 }
 
-
 //  GiveawaysManager Settings
 const {GiveawaysManager} = require('discord-giveaways');
 client.GiveawaysManager = new GiveawaysManager(client, {
@@ -125,7 +119,7 @@ client.GiveawaysManager = new GiveawaysManager(client, {
     }
 });
 
-
+//  Setting up the loading Bar's
 const loadEvents = new cliProgress.SingleBar({
     format: 'Events   | {bar} | {percentage}% || {value}/{total}',
     barCompleteChar: '\u2588',
