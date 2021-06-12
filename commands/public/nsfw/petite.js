@@ -62,7 +62,7 @@ module.exports.run = async (client, message, args) => {
 
             //  The Discord Embed
             const embed = new MessageEmbed()
-                .setTitle("Here is your Teen image ... :eyes:")
+                .setTitle("Here is your Petite image ... :eyes:")
                 .setDescription(`[Link if you don't see image](${selected})`)
                 .setImage(selected)
                 .setColor(0x8e44ad)
