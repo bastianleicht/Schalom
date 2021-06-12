@@ -320,5 +320,7 @@ pool.on('release', function (connection) {
     console.log('Connection %d released', connection.threadId);
 });
 
+// JS garbage collection
+if(global.gc) global.gc();
 
 client.login(config.token2 || process.env.TOKEN);
