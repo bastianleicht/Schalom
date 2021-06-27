@@ -6,7 +6,7 @@
 const { MessageEmbed } = require('discord.js');
 const cherio = require('cherio');
 const request = require('request');
-const sendError = require('./../../../utils/error');
+const sendError = require(__BASE__ + '/utils/sendError');
 
 module.exports.run = async (client, message, args) => {
     if (message.channel.type !== 'dm' && !message.channel.nsfw) {
