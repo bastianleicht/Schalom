@@ -6,6 +6,12 @@
 const { MessageEmbed } = require("discord.js");
 const config = require(__BASE__ + '/opt/config.json');
 
+/**
+ * @param title     The Title of the Message
+ * @param text      Displayed Text in the Error Message
+ * @param channel   The Channel the message should be send in.
+ * @returns {Promise<void>}
+ */
 module.exports = async (title, text, channel) => {
     let embed = new MessageEmbed()
         .setTitle(title)
