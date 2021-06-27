@@ -20,16 +20,12 @@ const utils         = require(__BASE__ + '/utils/utils');
 const error         = require(__BASE__ + '/utils/sendError');
 const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
-let events = 0;
-let loadedEvents = 0;
-let commands = 0;
-let loadedCommands = 0;
-
+// Initialising the Client
 const client = new Discord.Client({
     disabledEvents: ["RELATIONSHIP_ADD", "RELATIONSHIP_REMOVE", "TYPING_START"]
 });
 
-//  MYSQL Database
+//  Setting up MYSQL and the Pool Cluster
 const clusterConfig = {
     canRetry: true,
     removeNodeErrorCount: 1,
@@ -44,6 +40,11 @@ pool.add('SLAVE3', DBConfig.connection);
 
 client.dbconfig = DBConfig;
 client.pool = pool;
+
+/**
+ * MySQL Query
+ * @type {{query: (function(): {on: function(*, *): this})}}
+ */
 client.db = {
     query: function () {
         let queryArgs = Array.prototype.slice.call(arguments),
@@ -98,7 +99,7 @@ client.commands.owner = new Enmap();
 client.queue = new Map();
 
 //  GiveawaysManager Settings
-const {GiveawaysManager} = require('discord-giveaways');
+const { GiveawaysManager } = require('discord-giveaways');
 client.GiveawaysManager = new GiveawaysManager(client, {
     storage: "./opt/giveaways.json",
     updateCountdownEvery: 5000,
@@ -111,6 +112,11 @@ client.GiveawaysManager = new GiveawaysManager(client, {
 });
 
 //  Setting up the loading Bar's
+let events = 0;
+let loadedEvents = 0;
+let commands = 0;
+let loadedCommands = 0;
+
 const loadEvents = new cliProgress.SingleBar({
     format: 'Events   | {bar} | {percentage}% || {value}/{total}',
     barCompleteChar: '\u2588',
