@@ -5,5 +5,4 @@ commands/.todo
 data
 opt/config.js
 opt/giveaways.json
-json.sqlite
 package-lock.json
