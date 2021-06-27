@@ -2,6 +2,22 @@ const { MessageEmbed } = require('discord.js');
 const { stripIndent } = require('common-tags');
 
 /**
+ * Return's the current Date (yyyy-month-dd hh:mm:ss)
+ * @return {string}
+ */
+function getDate() {
+  const date = new Date();
+  const year = date.getYear() + 1900;
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().length < 2 ? "0" + date.getDate() : date.getDate();
+  const hour = date.getHours().toString().length < 2 ? "0" + date.getHours() : date.getHours();
+  const minute = date.getMinutes().toString().length < 2 ? "0" + date.getMinutes() : date.getMinutes();
+  const second = date.getSeconds().toString().length < 2 ? "0" + date.getSeconds() : date.getSeconds();
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+}
+
+/**
  * Capitalizes a string
  * @param {string} string 
  */
@@ -81,6 +97,7 @@ function getOrdinalNumeral(number) {
 }
 
 module.exports = {
+  getDate,
   capitalize,
   removeElement,
   trimArray,

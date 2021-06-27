@@ -79,7 +79,7 @@ client.config = config;
 client.utils = utils;
 client.error = error;
 client.errorHandler = errorHandler;
-client.date = getDate();
+client.date = utils.getDate();
 
 //  Command Handler (public)
 client.events = new Enmap();
@@ -96,18 +96,6 @@ client.commands.team = new Enmap();
 client.commands.owner = new Enmap();
 //  Music Queue
 client.queue = new Map();
-
-function getDate() {
-    let date = new Date();
-    let year = date.getYear() + 1900;
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let month = months[date.getMonth()];
-    let day = date.getDate().toString().length < 2 ? "0" + date.getDate() : date.getDate();
-    let hour = date.getHours().toString().length < 2 ? "0" + date.getHours() : date.getHours();
-    let minute = date.getMinutes().toString().length < 2 ? "0" + date.getMinutes() : date.getMinutes();
-    let second = date.getSeconds().toString().length < 2 ? "0" + date.getSeconds() : date.getSeconds();
-    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-}
 
 //  GiveawaysManager Settings
 const {GiveawaysManager} = require('discord-giveaways');
