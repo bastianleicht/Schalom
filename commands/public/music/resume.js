@@ -3,9 +3,7 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const { MessageEmbed } = require("discord.js");
-const sendError = require("../../../utils/error");
 
 module.exports.run = async function (client, message, args) {
   if (message.channel === 'dm') return;
@@ -14,13 +12,13 @@ module.exports.run = async function (client, message, args) {
   if (serverQueue && !serverQueue.playing) {
     serverQueue.playing = true;
     serverQueue.connection.dispatcher.resume();
-    let xd = new MessageEmbed()
+    let embed = new MessageEmbed()
     .setDescription("▶ Resumed the music for you!")
     .setColor("YELLOW")
     .setAuthor("Music has been Resumed!", "https://cdn.bastianleicht.de/etc/schalom/music.gif");
-    return message.channel.send(xd);
+    return message.channel.send(embed);
   }
-  return sendError("There is nothing playing in this server.", message.channel);
+  return client.sendError("There is nothing playing in this server.", message.channel);
 };
 
 module.exports.help = {

@@ -3,30 +3,28 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const { Util, MessageEmbed } = require("discord.js");
 const ytdl = require("ytdl-core");
 const yts = require("yt-search");
-const sendError = require("../../../utils/error");
 const config = require('../../../opt/config.json');
 
 module.exports.run = async function (client, message, args) {
   if (message.channel === 'dm') return;
 
     const channel = message.member.voice.channel;
-    if (!channel)return sendError("I'm sorry but you need to be in a voice channel to play music!", message.channel);
+    if (!channel)return client.sendError("I'm sorry but you need to be in a voice channel to play music!", message.channel);
 
     const permissions = channel.permissionsFor(message.client.user);
-    if (!permissions.has("CONNECT"))return sendError("I cannot connect to your voice channel, make sure I have the proper permissions!", message.channel);
-    if (!permissions.has("SPEAK"))return sendError("I cannot speak in this voice channel, make sure I have the proper permissions!", message.channel);
+    if (!permissions.has("CONNECT")) return client.sendError("I cannot connect to your voice channel, make sure I have the proper permissions!", message.channel);
+    if (!permissions.has("SPEAK")) return client.sendError("I cannot speak in this voice channel, make sure I have the proper permissions!", message.channel);
 
     let searchString = args.join(" ");
-    if (!searchString)return sendError("You didn't poivide want i want to play", message.channel);
+    if (!searchString) return client.sendError("You didn't poivide want i want to play", message.channel);
 
     let serverQueue = message.client.queue.get(message.guild.id);
 
     let searched = await yts.search(searchString);
-    if(searched.videos.length === 0)return sendError("Looks like i was unable to find the song on YouTube", message.channel);
+    if(searched.videos.length === 0) return client.sendError("Looks like i was unable to find the song on YouTube", message.channel);
     let songInfo = searched.videos[0];
 
     const song = {
@@ -67,7 +65,7 @@ module.exports.run = async function (client, message, args) {
     const play = async (song) => {
       const queue = message.client.queue.get(message.guild.id);
       if (!song) {
-        sendError("Leaving the voice channel because I think there are no songs in the queue.", message.channel);
+        client.sendError("Leaving the voice channel because I think there are no songs in the queue.", message.channel);
         queue.voiceChannel.leave();//If you want your bot stay in vc 24/7 remove this line :D
         message.client.queue.delete(message.guild.id);
         return;
@@ -93,15 +91,14 @@ module.exports.run = async function (client, message, args) {
     };
 
     try {
-      const connection = await channel.join();
-      queueConstruct.connection = connection;
-      channel.guild.voice.setSelfDeaf(true);
-      play(queueConstruct.songs[0]);
+      queueConstruct.connection = await channel.join();
+      await channel.guild.voice.setSelfDeaf(true);
+      await play(queueConstruct.songs[0]);
     } catch (error) {
       console.error(`I could not join the voice channel: ${error}`);
       message.client.queue.delete(message.guild.id);
       await channel.leave();
-      return sendError(`I could not join the voice channel: ${error}`, message.channel);
+      return client.sendError(`I could not join the voice channel: ${error}`, message.channel);
     }
 };
 

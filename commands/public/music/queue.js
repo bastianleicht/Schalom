@@ -3,16 +3,13 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-//jshint esversion: 8
 const { MessageEmbed } = require("discord.js");
-const sendError = require("../../../utils/error");
 
 module.exports.run = async function (client, message, args) {
-
     if (message.channel === 'dm') return;
 
     const serverQueue = message.client.queue.get(message.guild.id);
-    if (!serverQueue) return sendError("There is nothing playing in this server.", message.channel);
+    if (!serverQueue) return client.sendError("There is nothing playing in this server.", message.channel);
 
     let queue = new MessageEmbed()
     .setAuthor("Server Songs Queue", "https://cdn.bastianleicht.de/etc/schalom/music.gif")
