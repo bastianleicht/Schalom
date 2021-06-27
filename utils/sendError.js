@@ -4,7 +4,7 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const { MessageEmbed } = require("discord.js");
-const config = require('../opt/config.json');
+const config = require(__BASE__ + '/opt/config.json');
 
 module.exports = async (title, text, channel) => {
     let embed = new MessageEmbed()
@@ -15,5 +15,5 @@ module.exports = async (title, text, channel) => {
         .setFooter(config.copyright);
     await channel.send(embed).then(msg => {
         msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
-    }).catch(console.error);                    // Logs the error if there is one ;
+    }).catch(console.error);                    // Logs the error if there is one
 };
