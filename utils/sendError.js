@@ -4,7 +4,7 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const { MessageEmbed } = require("discord.js");
-const config = require(__BASE__ + '/opt/config.json');
+const config = require(__BASE__ + '/opt/config');
 
 /**
  * @param title     The Title of the Message

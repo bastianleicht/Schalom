@@ -6,7 +6,6 @@
 const { Util, MessageEmbed } = require("discord.js");
 const ytdl = require("ytdl-core");
 const yts = require("yt-search");
-const config = require('../../../opt/config.json');
 
 module.exports.run = async function (client, message, args) {
   if (message.channel === 'dm') return;
@@ -47,7 +46,7 @@ module.exports.run = async function (client, message, args) {
       .addField("Name", song.title, true)
       .addField("Duration", song.duration, true)
       .addField("Requested by", song.req.tag, true)
-      .setFooter(`${config.copyright} • Views: ${song.views} | ${song.ago}`);
+      .setFooter(`${client.config.copyright} • Views: ${song.views} | ${song.ago}`);
       return message.channel.send(thing);
     }
 
@@ -86,7 +85,7 @@ module.exports.run = async function (client, message, args) {
       .addField("Name", song.title, true)
       .addField("Duration", song.duration, true)
       .addField("Requested by", song.req.tag, true)
-      .setFooter(`${config.copyright} • Views: ${song.views} | ${song.ago}`);
+      .setFooter(`${client.config.copyright} • Views: ${song.views} | ${song.ago}`);
       queue.textChannel.send(thing);
     };
 

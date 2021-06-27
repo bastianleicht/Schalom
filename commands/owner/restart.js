@@ -3,13 +3,12 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-const config = require(__BASE__ + '/opt/config.json');
 
 module.exports.run = async (client, message, args) => {
-    if (message.author.id !== config.owner) return;
+    if (message.author.id !== client.config.owner) return;
 
     await message.author.send('Restarting...');
-    client.destroy().then(() => client.login(config.token));
+    client.destroy().then(() => client.login(client.config.token));
 };
 
 module.exports.help = {

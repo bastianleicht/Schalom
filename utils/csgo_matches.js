@@ -4,7 +4,7 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 const axios = require('axios');
-const config = require('../opt/config.json');
+const config = require(__BASE__ + '/opt/config');
 
 const GetStatBySteamId = steam_id => {
     return axios

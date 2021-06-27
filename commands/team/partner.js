@@ -3,9 +3,7 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
 const Discord = require('discord.js');
-const config = require('../../opt/config.json');
 
 exports.run = async (client, message, args) => {
 
@@ -19,10 +17,10 @@ exports.run = async (client, message, args) => {
     if (args[0].includes("https://discord.gg/") === false && message.author.hasPermission('MANAGE_MESSAGES')) {
         const embed = new Discord.MessageEmbed()
         .setTitle(':warning: | Error')
-        .addField('**Invalid Command Syntax!** Please use:', `${config.prefix}partner <Invite Link> <Kontakt> <Name>`)
+        .addField('**Invalid Command Syntax!** Please use:', `${client.config.prefix}partner <Invite Link> <Kontakt> <Name>`)
         .setColor(0x8e44ad)
         .setTimestamp()
-        .setFooter(config.copyright);
+        .setFooter(client.config.copyright);
         return message.member.send(embed).then(msg => {
             msg.delete({ timeout: 15000});
         }).catch(console.error);
@@ -35,7 +33,7 @@ exports.run = async (client, message, args) => {
         .setDescription(`▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n**Name:** ${name}\n**Kontakt:** ${args[1]}\n**Discord:** ${args[0]}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬`)
         .setColor(0x8e44ad)
         .setTimestamp()
-        .setFooter(config.copyright);
+        .setFooter(client.config.copyright);
 
         message.channel.send(embed);
     
@@ -45,7 +43,7 @@ exports.run = async (client, message, args) => {
             .setDescription(`I'm sorry but you don't have the **MANAGE_MESSAGES** Permission`)
             .setColor('#FF0000')
             .setTimestamp()
-            .setFooter(config.copyright);
+            .setFooter(client.config.copyright);
         message.channel.send(embed).then(msg => {
             msg.delete({ timeout: 10000 });         // Deletes Message after 10seconds
         }).catch(console.error); 
