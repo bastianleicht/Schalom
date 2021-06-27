@@ -3,7 +3,7 @@ node_modules
 commands/.old
 commands/.todo
 data
-opt/config.json
+opt/config.js
 opt/giveaways.json
 json.sqlite
 package-lock.json

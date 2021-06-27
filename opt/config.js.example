@@ -1,0 +1,31 @@
+/*
+ * Copyright (c) 2020-2021, Bastian Leicht <mail@bastianleicht.de>
+ *
+ * PDX-License-Identifier: BSD-2-Clause
+ */
+
+module.exports = {
+    token: "",
+    owner: "350618993020764161",
+    team: ["", ""],
+    prefix: "pp!",
+    version: "v1.2.1",
+    copyright: "© 2021 Bastian Leicht",
+    reportChannel: "",
+    serverstats: {
+        main: {
+            serverID: "",
+            channel:""
+        }
+    },
+    api: {
+        fortnite: "",
+        csgo: "",
+        osu: "",
+        ipinfo: ""
+    },
+    giveaway: {
+        everyoneMention: false,
+        hostedBy: true
+    }
+};
