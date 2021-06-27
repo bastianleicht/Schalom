@@ -37,12 +37,12 @@ const clusterConfig = {
 };
 
 const pool = mysql.createPoolCluster(clusterConfig);
-pool.add('MASTER', dbconfig.connection);
-pool.add('SLAVE1', dbconfig.connection);
-pool.add('SLAVE2', dbconfig.connection);
-pool.add('SLAVE3', dbconfig.connection);
+pool.add('MASTER', DBConfig.connection);
+pool.add('SLAVE1', DBConfig.connection);
+pool.add('SLAVE2', DBConfig.connection);
+pool.add('SLAVE3', DBConfig.connection);
 
-client.dbconfig = dbconfig;
+client.dbconfig = DBConfig;
 client.pool = pool;
 client.db = {
     query: function () {
