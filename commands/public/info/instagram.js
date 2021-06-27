@@ -6,12 +6,11 @@
 const { MessageEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
 const fetch = require("node-fetch");
-const sendError = require('./../../../utils/error');
 
 module.exports.run =  async (client, message, args) => {
 
     const name = args.join(" ");
-    if(!name) return sendError(':warning: | Error', '**Invalid Command Syntax!** Please use: \n' + `${client.config.prefix}instagram <username>`, message.channel);
+    if(!name) return client.sendError(':warning: | Error', '**Invalid Command Syntax!** Please use: \n' + `${client.config.prefix}instagram <username>`, message.channel);
 
     const url = `https://instagram.com/${name}/?__a=1`;
     let res;
@@ -19,7 +18,7 @@ module.exports.run =  async (client, message, args) => {
     try {
         res = await fetch(url).then(url => url.json());
     } catch (e) {
-        return sendError(':warning: | Error', 'I couldn\'t find that account... :(', message.channel);
+        return client.sendError(':warning: | Error', 'I couldn\'t find that account... :(', message.channel);
     }
 
     const account = res.graphql.user;

@@ -5,13 +5,12 @@
  */
 const { MessageEmbed } = require("discord.js");
 const IPinfo = require("node-ipinfo");
-const sendError = require('./../../../utils/error');
 
 module.exports.run =  async (client, message, args) => {
     let ipinfo = new IPinfo(client.config.api.ipinfo);
 
     const ip = args.join(" ");
-    if(!ip) return sendError(':warning: | Error', '**Invalid Command Syntax!** Please use: \n' + `${client.config.prefix}ipinfo <IP Adress>`, message.channel);
+    if(!ip) return client.sendError(':warning: | Error', '**Invalid Command Syntax!** Please use: \n' + `${client.config.prefix}ipinfo <IP Adress>`, message.channel);
 
     ipinfo.lookupIp(ip).then((IPresponse) => {
         const embed = new MessageEmbed()
@@ -29,14 +28,14 @@ module.exports.run =  async (client, message, args) => {
                 `**❯ Timezone:** ${IPresponse.timezone}`,
                 '\u200b'
             ])
-            .addField('ASN:', [
+            /*.addField('ASN:', [
                 `**❯ ASN:** ${IPresponse.asn.asn        ? 'N/A' : 'Unknown'}`,
                 `**❯ Name:** ${IPresponse.asn.name      ? 'N/A' : 'Unknown'}`,
                 `**❯ Domain:** ${IPresponse.asn.domain  ? 'N/A' : 'Unknown'}`,
                 `**❯ Route:** ${IPresponse.asn.route    ? 'N/A' : 'Unknown'}`,
                 `**❯ Type:** ${IPresponse.asn.type      ? 'N/A' : 'Unknown'}`,
                 '\u200b'
-            ])
+            ])*/
             .setColor("bc2a8d")
             .setTimestamp()
             .setFooter(client.config.copyright);

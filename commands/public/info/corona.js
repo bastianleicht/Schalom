@@ -5,7 +5,6 @@
  */
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-const sendError = require('./../../../utils/error');
 
 module.exports.run = async (client, message, args) => {
     if (message.author.bot) return;
@@ -17,7 +16,7 @@ module.exports.run = async (client, message, args) => {
         response = await axios.get(url);
         corona = response.data;
     } catch (error) {
-        return sendError('Corona | Error', `***${args[0]}*** doesn't exist, or data isn't being collected!`, message.channel);
+        return client.sendError('Corona | Error', `***${args[0]}*** doesn't exist, or data isn't being collected!`, message.channel);
     }
 
     const embed = new MessageEmbed()

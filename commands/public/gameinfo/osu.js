@@ -5,7 +5,6 @@
  */
 const Discord = require('discord.js');
 const osu = require('node-osu');
-const sendError = require('./../../../utils/error');
 
 module.exports.run = async (client, message, args) => {
     let osuApi = new osu.Api(client.config.api.osu, {
@@ -14,13 +13,13 @@ module.exports.run = async (client, message, args) => {
     });
 
     let query = message.content.split(/\s+/g).slice(1).join(" ");
-    if (!query) return sendError('OSU | Error','Please provide me a user to search for!', message.channel);
+    if (!query) return client.sendError('OSU | Error','Please provide me a user to search for!', message.channel);
 
     try {
         osuApi.getUser({
             u: query
         }).then(user => {
-            if (!user.name) return sendError('OSU | Error',`The user **${query}** was not found!`, message.channel);
+            if (!user.name) return client.sendError('OSU | Error',`The user **${query}** was not found!`, message.channel);
 
             const embed = new Discord.MessageEmbed()
                 .setTitle('OSU | Stats')
@@ -37,11 +36,11 @@ module.exports.run = async (client, message, args) => {
             return message.channel.send(embed);
         }).catch(err => {
             console.log(err);
-            return sendError('OSU | Error',`The user **${query}** was not found!`, message.channel);
+            return client.sendError('OSU | Error',`The user **${query}** was not found!`, message.channel);
         });
 
     } catch (err) {
-        return sendError('OSU | Error', 'Something went wrong while executing that function!\n Here is the Error:' + err, message.channel);
+        return client.sendError('OSU | Error', 'Something went wrong while executing that function!\n Here is the Error:' + err, message.channel);
     }
 };
 
