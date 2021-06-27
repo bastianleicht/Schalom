@@ -17,7 +17,7 @@ const cliProgress   = require('cli-progress');
 const DBConfig      = require(__BASE__ + '/opt/database');
 const config        = require(__BASE__ + '/opt/config');
 const utils         = require(__BASE__ + '/utils/utils');
-const error         = require(__BASE__ + '/utils/sendError');
+const sendError         = require(__BASE__ + '/utils/sendError');
 const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 // Initialising the Client
@@ -78,7 +78,7 @@ client.db = {
 //  Client Config, Utils, errorHandler, date
 client.config = config;
 client.utils = utils;
-client.error = error;
+client.sendError = sendError;
 client.errorHandler = errorHandler;
 client.date = utils.getDate();
 
