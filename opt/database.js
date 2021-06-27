@@ -3,7 +3,6 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-
 module.exports = {
     connection: {
         connectionLimit : 5,

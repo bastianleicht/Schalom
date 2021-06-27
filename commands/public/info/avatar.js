@@ -5,7 +5,7 @@
  */
 const Discord = require('discord.js');
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
     if (message.channel === 'dm') return;
     if (message.author.bot) return;
     
