@@ -17,7 +17,7 @@ const cliProgress   = require('cli-progress');
 const DBConfig      = require(__BASE__ + '/opt/database');
 const config        = require(__BASE__ + '/opt/config');
 const utils         = require(__BASE__ + '/utils/utils');
-const sendError         = require(__BASE__ + '/utils/sendError');
+const sendError     = require(__BASE__ + '/utils/sendError');
 const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 // Initialising the Client
@@ -292,21 +292,20 @@ client.on('warn', warning => errorHandler.warn(warning));
 client.on('disconnected', () => errorHandler.disconnect());
 client.on('reconnecting', () => errorHandler.reconnecting());
 
+//  Process Events
 process.on('unhandledRejection', error => errorHandler.unhandledRejection(error));
 process.on('uncaughtException', error => errorHandler.uncaughtException(error));
 
+//  Pool Events
 pool.on('acquire', function (connection) {
     console.log('Connection %d acquired', connection.threadId);
 });
-
 pool.on('connection', function (connection) {
     connection.query('SET SESSION auto_increment_increment=1');
 });
-
 pool.on('enqueue', function () {
     console.log('Waiting for available connection slot');
 });
-
 pool.on('release', function (connection) {
     console.log('Connection %d released', connection.threadId);
 });
