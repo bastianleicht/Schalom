@@ -19,7 +19,7 @@ module.exports.run = async function (client, message, args) {
     if (!permissions.has("SPEAK")) return client.sendError("I cannot speak in this voice channel, make sure I have the proper permissions!", message.channel);
 
     let searchString = args.join(" ");
-    if (!searchString) return client.sendError("You didn't poivide want i want to play", message.channel);
+    if (!searchString) return client.sendError("You didn't provide want i want to play", message.channel);
 
     let serverQueue = message.client.queue.get(message.guild.id);
 
