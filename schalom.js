@@ -4,19 +4,21 @@
  * PDX-License-Identifier: BSD-2-Clause
  */
 
-//  Discord
-const Discord = require("discord.js");
-const fs = require('fs');
-const Enmap = require('enmap');
-const mysql = require('mysql');
-const cliProgress = require('cli-progress');
-
-const dbconfig = require('./opt/database');
-const config = require('./opt/config.json');
-const utils = require('./utils/utils.js');
-const errorHandler = require('./utils/handler/error');
-
+//  Initialising Global Variables
 global.__BASE__ = process.cwd();
+
+//  Importing Libraries
+const Discord       = require("discord.js");
+const fs            = require('fs');
+const Enmap         = require('enmap');
+const mysql         = require('mysql');
+const cliProgress   = require('cli-progress');
+
+const DBConfig      = require(__BASE__ + '/opt/database');
+const config        = require(__BASE__ + '/opt/config');
+const utils         = require(__BASE__ + '/utils/utils');
+const error         = require(__BASE__ + '/utils/sendError');
+const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 let events = 0;
 let loadedEvents = 0;
@@ -75,6 +77,7 @@ client.db = {
 //  Client Config, Utils, errorHandler, date
 client.config = config;
 client.utils = utils;
+client.error = error;
 client.errorHandler = errorHandler;
 client.date = getDate();
 
