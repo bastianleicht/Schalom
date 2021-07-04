@@ -3,13 +3,11 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, [target]) => {
     if (message.channel === 'dm') return;
-    let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+    let user = message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.member;
 
     const flags = {
         DISCORD_EMPLOYEE: 'Discord Employee',
@@ -52,7 +50,7 @@ module.exports.run = async (client, message, args, [target]) => {
         return arr;
     }
 
-    const member = message.mentions.members.last() || message.guild.members.cache.get(target) || message.member;
+    const member = message.mentions.users.first() || message.guild.members.cache.get(target) || message.member;
     const userFlags = member.user.flags.toArray();
     const roles = member.roles.cache
         .sort((a, b) => b.position - a.position)
