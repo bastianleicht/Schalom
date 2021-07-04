@@ -8,7 +8,7 @@ const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-    let user = message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author;
+    let user = message.mentions.users.first() || message.author;
 
     client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], (error, { length }) => {
         if (error || !length) {
