@@ -5,9 +5,11 @@
  */
 const Discord = require('discord.js');
 
+//TODO: Rewrite this Code because it is a Mess!
+
 module.exports.run = async (client, message, args) => {
     const botRole = message.guild.member(client.user).roles.highest.position;
-    const userRole = message.guild.member(message.mentions.members.first()).roles.highest.position;
+    const userRole = message.guild.member(message.mentions.users.first()).roles.highest.position;
     const highestUserRole = message.member.roles.highest.position;
     let reason = args.slice(1).join(" ");
 
@@ -35,13 +37,13 @@ module.exports.run = async (client, message, args) => {
         }).catch(console.error);                // Logs the error if there is one
     }
 
-    if(!message.mentions.members.first()) {
+    if(!message.mentions.users.first()) {
         return message.channel.send('You have to provide a User to kick!').then(msg => {
             msg.delete({ timeout: 10000 });     // Deletes Message after 10seconds
         }).catch(console.error);                // Logs the error if there is one
     }
 
-    if(message.mentions.members.first().id === message.author.id) {
+    if(message.mentions.users.first().id === message.author.id) {
         return message.channel.send('You can\'t kick yourself!').then(msg => {
             msg.delete({ timeout: 10000 });     // Deletes Message after 10seconds
         }).catch(console.error);                // Logs the error if there is one
@@ -59,7 +61,7 @@ module.exports.run = async (client, message, args) => {
         }).catch(console.error);                // Logs the error if there is one
     }
 
-    if(!message.guild.member(message.mentions.members.first()).kickable) {
+    if(!message.guild.member(message.mentions.users.first()).kickable) {
         return message.channel.send('**An error occurred while kicking that member!**').then(msg => {
             msg.delete({ timeout: 10000 });     // Deletes Message after 10seconds
         }).catch(console.error);
@@ -67,13 +69,13 @@ module.exports.run = async (client, message, args) => {
 
     if (reason.length < 1) reason = "No reason given.";
 
-    message.guild.member(message.mentions.members.first()).kick(reason).catch(error => console.log(error));
+    message.guild.member(message.mentions.users.first()).kick(reason).catch(error => console.log(error));
 
-    await message.mentions.members.first().send(`You have been kicked in **${message.guild.name}** by <@${message.author.id}>, ${reason}`);
+    await message.mentions.users.first().send(`You have been kicked in **${message.guild.name}** by <@${message.author.id}>, ${reason}`);
 
     const embed = new Discord.MessageEmbed()
         .setTitle(':hammer: Moderation')
-        .setDescription(`You successfully kicked <@${message.mentions.members.first().id}> with the reason: **${reason}s**!`)
+        .setDescription(`You successfully kicked <@${message.mentions.users.first().id}> with the reason: **${reason}s**!`)
         .setColor('#FFE100FF')
         .setTimestamp()
         .setFooter(client.config.copyright);
