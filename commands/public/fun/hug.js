@@ -3,15 +3,13 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
 
 module.exports.run = async (client, message, args) => {
     if (message.channel === 'dm') return;
 
-    if(!message.mentions.members.first()) {
+    if(!message.mentions.users.first()) {
         const embed = new MessageEmbed()
             .setTitle(':warning: | Error')
             .addField('**Invalid Command Syntax!** Please use:', `${client.config.prefix}hug <Member>`)
@@ -32,7 +30,7 @@ module.exports.run = async (client, message, args) => {
 
         const embed = new MessageEmbed()
             .setTitle('Hug ❤')
-            .setDescription(`<@${message.author.id}> hugs <@${message.mentions.users.first().id || message.mentions.members.first()}>`)
+            .setDescription(`<@${message.author.id}> hugs <@${message.mentions.users.first().id || message.mentions.users.first()}>`)
             .setImage(data.link)
             .setColor(3447003)
             .setTimestamp()

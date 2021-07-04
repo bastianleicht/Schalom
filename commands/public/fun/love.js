@@ -3,14 +3,12 @@
  *
  * PDX-License-Identifier: BSD-2-Clause
  */
-// jshint esversion: 8
-// jshint multistr: true 
 const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
     if (message.channel === 'dm') return;
 
-    if(!message.mentions.members.first()) {
+    if(!message.mentions.users.first()) {
         const embed = new MessageEmbed()
             .setTitle(':warning: | Error')
             .addField('**Invalid Command Syntax!** Please use:', `${client.config.prefix}love <Member>`)
