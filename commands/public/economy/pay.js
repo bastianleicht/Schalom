@@ -9,7 +9,7 @@ const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-    let user = message.mentions.members.first();
+    let user = message.mentions.users.first();
 
     client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], (error, { length }) => {
         if (error || !length) {

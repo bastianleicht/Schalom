@@ -10,7 +10,7 @@ const errorHandler  = require(__BASE__ + '/utils/handler/error');
 module.exports.run = async (client, message, args) => {
     if (message.author.id !== client.config.owner) return;
 
-    let user = message.mentions.members.first() || message.author;
+    let user = message.mentions.users.first() || message.author;
     let amount = args[1];
 
     if (isNaN(args[1])) return;

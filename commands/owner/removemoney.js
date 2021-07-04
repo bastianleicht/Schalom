@@ -10,7 +10,7 @@ const errorHandler  = require(__BASE__ + '/utils/handler/error');
 module.exports.run = async (client, message, args) => {
     if (message.author.id !== client.config.owner) return;
 
-    let user = message.mentions.members.first() || message.author;
+    let user = message.mentions.users.first() || message.author;
     let amount = args[1];
 
     if (isNaN(args[1])) return;
@@ -18,8 +18,7 @@ module.exports.run = async (client, message, args) => {
     client.db.query('SELECT * FROM economy WHERE userID = ?', [message.author.id], (error, {length}) => {
         if (error || !length) {
             // User does not exist in DB
-            client.db.query(`INSERT INTO economy (userid)
-                             values (?)`, [message.author.id], (error, {insertId}) => {
+            client.db.query(`INSERT INTO economy (userid) values (?)`, [message.author.id], (error, {insertId}) => {
                 if (error) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!\n ${error}`);
                 if (!insertId) return errorHandler.mysql(`Error while inserting User : "${message.author.id}"!`);
 

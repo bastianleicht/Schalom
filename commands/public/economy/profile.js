@@ -8,7 +8,7 @@ const errorHandler  = require(__BASE__ + '/utils/handler/error');
 
 module.exports.run = async (client, message, args) => {
 
-    const user = message.mentions.members.first() || message.author;
+    const user = message.mentions.users.first() || message.author;
 
     client.db.query('SELECT * FROM economy WHERE userID = ?', [user.id], (error, { length }) => {
         if (error || !length) {
