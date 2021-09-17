@@ -313,4 +313,4 @@ pool.on('release', function (connection) {
 // JS garbage collection
 if(global.gc) global.gc();
 
-client.login(config.token2 || process.env.TOKEN);
+client.login(config.token || process.env.TOKEN);
